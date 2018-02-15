@@ -1,4 +1,4 @@
-setwd("C:/Users/Emtiaz/Documents/R/code/Project")
+setwd("E:/Github/1.project/Project-Statistical-Methods")
 #getwd()
 library(ggplot2)
 
