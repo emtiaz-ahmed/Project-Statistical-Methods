@@ -178,9 +178,108 @@ draw_accuracy_plot <- function(data){
   
 }
 
+draw_state_psychometric_data<-function(){
+  totalSubject = list.dirs(path = "input", full.names = TRUE, recursive = FALSE)
+  totalSubject
+  flagg = 1
+  
+  for(j in totalSubject){
+    # dir.name = paste("input/", "subject01" )
+    # dir.name
+    #...read all tai.csv files from all folders
+    # subject.files <- dir("input/subject21", recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
+    subject.files <- dir(j, recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
+    subject.file.names <- list.dirs(path = "input", full.names = FALSE, recursive = FALSE)
+    subject.file.names
+    #...find number of files
+    total.Nasa.file = length(subject.files)
+    total.Nasa.file
+    
+    # session.name = list.dirs(path = "input/subject21", full.names = FALSE, recursive = FALSE)
+    session.name = list.dirs(path = j, full.names = FALSE, recursive = FALSE)
+    total.session = total.Nasa.file / 2
+    
+    if(total.session < length(session.name)){
+      flagg = flagg + 1
+      next
+    }
+    
+    nasa.label.list = list()
+    for(sname in 1:length(session.name)){
+      
+      nasa.label.list[sname] = list(c(rep(session.name[sname],6)))
+      
+    }
+    nasa.label = unlist(nasa.label.list)
+    nasa.label
+    
+    
+    subject.nasa = list()
+    
+    for(i in 1:total.Nasa.file){
+      temp1 = read.csv(subject.files[i], header = TRUE)
+      subject.nasa[i] = list(temp1)
+      
+    }
+    subject.nasa
+    subject.nasa.df = as.data.frame(subject.nasa)
+    subject.nasa.df
+    
+   
+   
+    nasa.response = c(rep(c("Mental Demand", "Physical Demand", "Temporal Demand", "Performance", "Effort", "Frustration"),length(session.name)))
+    nasa.response
+    nasa.cutting = c(subject.nasa.df$Cutting1, subject.nasa.df$Cutting2, 
+                     subject.nasa.df$Cutting3, subject.nasa.df$Cutting4, subject.nasa.df$Cutting5)
+    nasa.cutting
+    nasa.suturing = c(subject.nasa.df$Suturing1, subject.nasa.df$Suturing2, subject.nasa.df$Suturing3,
+                      subject.nasa.df$Suturing4, subject.nasa.df$Suturing5)
+    nasa.suturing
+    
+    nasa.data = data.frame(nasa.label, nasa.response, nasa.cutting, nasa.suturing)
+    nasa.data
+    
+    # #...concate string to create title
+    barTitle = paste("Barplots for all the NASA-TLX subscales of", subject.name)
+    xLabel = subject.name
+    
+    subject.name = paste(" ", subject.file.names[flagg])
+    subject.name
+    ggplot(nasa.data, aes(x=nasa.label, y=nasa.cutting)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
+      labs(title = barTitle, x = xLabel, y = "Time") +
+      theme(plot.title = element_text(hjust=0.5)) +
+      labs(fill = "Response") +
+      scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20))
+    
+    outputFile = paste("Quality_control/State_Psychometric_Data/Cutting/nasa_plot_of_subject_",subject.name,".png")
+    #...save the output files
+    ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
+    ggplot(nasa.data, aes(x=nasa.label, y=nasa.suturing)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
+      labs(title = barTitle, x = xLabel, y = "Time") +
+      theme(plot.title = element_text(hjust=0.5)) +
+      labs(fill = "Response") +
+      scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20))
+    
+    outputFile = paste("Quality_control/State_Psychometric_Data/Suturing/nasa_plot_of_subject_",subject.name,".png")
+    #...save the output files
+    ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
+    
+    # if(flagg == 5){
+    #   break
+    # }
+    flagg = flagg + 1
+  }
+  
+  
+}
+
+
+
 
 draw_Biographic_Data_plots(data)
 draw_Trait_Psychometric_Data_plots()
 
 draw_timing_plot(data)
 draw_accuracy_plot(data)
+
+draw_state_psychometric_data()
