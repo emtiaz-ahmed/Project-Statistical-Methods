@@ -75,7 +75,70 @@ draw_Trait_Psychometric_Data_plots<-function(){
   }
 }
 
-
+#...draw the timing plots for each subject based on their cutting and suturing time
+draw_timing_plot <- function(data){
+  #...create dataframe using subject name and all cutting time
+  cut.timing = data.frame(data$Subject, data$Cutting.Time.1, data$Cutting.Time.2, data$Cutting.Time.3, data$Cutting.Time.4, data$Cutting.Time.5)
+  #...create dataframe using subject name and all suturing time
+  sut.timing = data.frame(data$Subject, data$Suturing.Time.1 , data$Suturing.Time.2, data$Suturing.Time.3,
+                                 data$Suturing.Time.4, data$Suturing.Time.5)
+  #...find the number of rows
+  number.of.row = nrow(cut.timing)
+  
+  for(i in 1:number.of.row){
+    #...select specific row from the dataframe
+    sub.timing.cut = cut.timing[i,]
+    sub.timing.sut = sut.timing[i,] 
+    #...find the subject number
+    subject.name = sub.timing.cut$data.Subject
+    
+    #...create x axis ticks
+    label = c(rep("Session 1",2), rep("Session 2",2), rep("Session 3",2), rep("Session 4",2), rep("Session 5",2))
+    task.type = c("Cutting", "Suturing")
+    tasks = rep(task.type, 5)
+    
+    #...convert timing into time using ms()[member of lubridate library] and then convert into numeric value
+    cut.session1 = as.numeric(ms(sub.timing.cut$data.Cutting.Time.1)) / 60
+    cut.session2 = as.numeric(ms(sub.timing.cut$data.Cutting.Time.2)) / 60
+    cut.session3 = as.numeric(ms(sub.timing.cut$data.Cutting.Time.3)) / 60
+    cut.session4 = as.numeric(ms(sub.timing.cut$data.Cutting.Time.4)) / 60
+    cut.session5 = as.numeric(ms(sub.timing.cut$data.Cutting.Time.5)) / 60
+    
+    #...convert timing into time using ms()[member of lubridate library] and then convert into numeric value
+    sut.session1 = as.numeric(ms(sub.timing.sut$data.Suturing.Time.1)) / 60
+    sut.session2 = as.numeric(ms(sub.timing.sut$data.Suturing.Time.2)) / 60
+    sut.session3 = as.numeric(ms(sub.timing.sut$data.Suturing.Time.3)) / 60
+    sut.session4 = as.numeric(ms(sub.timing.sut$data.Suturing.Time.4)) / 60
+    sut.session5 = as.numeric(ms(sub.timing.sut$data.Suturing.Time.5)) / 60
+    
+    #...copy the timing's
+    timing = c(cut.session1,sut.session1, cut.session2, sut.session2, cut.session3, sut.session3
+                 , cut.session4, sut.session4, cut.session5, sut.session5)
+    
+    
+    #...create dataframe using label and cutting timing
+    subject.timing = data.frame(label, tasks, timing)
+    
+    #...concate string to create title
+    barTitle = paste("Timing barplot of subject", subject.name)
+    xLabel = paste("Subject", subject.name)
+    
+   
+    ggplot(subject.timing, aes(x=label, y=timing)) + geom_bar(aes(fill=tasks), position = "dodge", stat="identity") +
+      labs(title = barTitle, x = xLabel, y = "Time") +
+      theme(plot.title = element_text(hjust=0.5)) +
+      scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20))
+    
+    outputFile = paste("Quality_control/Performance_Data/Timing/timing_plot_of_subject_",subject.name,".png")
+    #...save the output files
+    ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
+  }
+  
+  
+  
+}
 
 draw_Biographic_Data_plots(data)
 draw_Trait_Psychometric_Data_plots()
+
+draw_timing_plot(data)
