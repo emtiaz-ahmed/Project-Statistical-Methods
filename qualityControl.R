@@ -328,17 +328,19 @@ draw_state_psychometric_data<-function(){
     nasa.data = data.frame(nasa.label, nasa.response, nasa.cutting, nasa.suturing)
     nasa.data
     
+    subject.name = paste(" ", subject.file.names[flagg])
+    subject.name
     # #...concate string to create title
     barTitle = paste("Barplots for all the NASA-TLX subscales of", subject.name)
     xLabel = subject.name
     
-    subject.name = paste(" ", subject.file.names[flagg])
-    subject.name
+    
     ggplot(nasa.data, aes(x=nasa.label, y=nasa.cutting)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
       labs(title = barTitle, x = xLabel, y = "Time") +
       theme(plot.title = element_text(hjust=0.5)) +
       labs(fill = "Response") +
-      scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20))
+      scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
+      scale_fill_manual(values = c("dodgerblue","plum","gold","deeppink1","springgreen","gray33"))
     
     outputFile = paste("Quality_control/State_Psychometric_Data/Cutting/nasa_plot_of_subject_",subject.name,".png")
     #...save the output files
@@ -347,7 +349,8 @@ draw_state_psychometric_data<-function(){
       labs(title = barTitle, x = xLabel, y = "Time") +
       theme(plot.title = element_text(hjust=0.5)) +
       labs(fill = "Response") +
-      scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20))
+      scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
+      scale_fill_manual(values = c("dodgerblue","plum","gold","deeppink1","springgreen","gray33"))
     
     outputFile = paste("Quality_control/State_Psychometric_Data/Suturing/nasa_plot_of_subject_",subject.name,".png")
     #...save the output files
