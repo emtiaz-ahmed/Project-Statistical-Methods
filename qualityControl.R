@@ -75,37 +75,50 @@ draw_Trait_Psychometric_Data_plots<-function(){
     
   
   #}
-  #...read all tai.csv files from all folders
-  files <- dir("input", recursive=TRUE, full.names=TRUE, pattern="*_tp.csv$")
-  files
-  #...find number of files
-  total.file = length(files)
-  total.file
-  
-  tai.score = list()
-  flag = 1
-  for(i in files){
-    tai.data = read.csv(i, header = FALSE)
-    tai.data
-    tai.score[flag] = list(tai.data$V2[1])
-    flag = flag + 1
-    
-  }
-  tai.df = as.data.frame(unlist(tai.score))
-  tai.df
-  
-  ggplot(tai.df, aes(tai.df$`unlist(tai.score)`)) +
+  # #...read all tai.csv files from all folders
+  # files <- dir("input", recursive=TRUE, full.names=TRUE, pattern="*_tp.csv$")
+  # files
+  # #...find number of files
+  # total.file = length(files)
+  # total.file
+  # 
+  # tai.score = list()
+  # flag = 1
+  # for(i in files){
+  #   tai.data = read.csv(i, header = FALSE)
+  #   tai.data
+  #   tai.score[flag] = list(tai.data$V2[1])
+  #   flag = flag + 1
+  #   
+  # }
+  # tai.df = as.data.frame(unlist(tai.score))
+  # tai.df
+  # 
+  # ggplot(tai.df, aes(tai.df$`unlist(tai.score)`)) +
+  #   geom_histogram(col="black", fill="dodgerblue1", binwidth=1) +
+  #   labs(title="Histogram of tai scores", x="Tai Score", y="Count") +
+  #   theme(plot.title = element_text(hjust=0.5)) +
+  #   scale_x_continuous(breaks = seq(24,56,by=2), limits = c(24,56))
+  # 
+  # outputFile = paste("Quality_control/Trait_Psychometric_data/",".png")
+  # ggsave(file="Quality_control/Trait_Psychometric_data/Tai_score_histogram.png", dpi = 600, width = 10, height = 8, units = "in")
+   
+  data.tai = read.table("tai_scores.txt") 
+  data.tai
+  ggplot(data.tai, aes(data.tai$V2)) +
     geom_histogram(col="black", fill="dodgerblue1", binwidth=1) +
     labs(title="Histogram of tai scores", x="Tai Score", y="Count") +
     theme(plot.title = element_text(hjust=0.5)) +
-    scale_x_continuous(breaks = seq(24,56,by=2), limits = c(24,56))
+    scale_x_continuous(breaks = seq(16,56,by=2), limits = c(16,56))
   
   outputFile = paste("Quality_control/Trait_Psychometric_data/",".png")
   ggsave(file="Quality_control/Trait_Psychometric_data/Tai_score_histogram.png", dpi = 600, width = 10, height = 8, units = "in")
-   
+  
   
   
 }
+
+
 
 #...draw the timing plots for each subject based on their cutting and suturing time
 draw_timing_plot <- function(data){
