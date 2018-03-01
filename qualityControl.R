@@ -227,7 +227,8 @@ draw_accuracy_plot <- function(data){
     subject.name = sub.score$data.Subject
 
     #...create x axis ticks
-    label = c("Session 1", "Session 2", "Session 3", "Session 4", "Session 5")
+    label = c(rep("Session 1",2), rep("Session 2",2), rep("Session 3",2), rep("Session 4",2),
+              rep("Session 5",2))
     #... task label
     task = c(rep(c("Cutting Score", "Suturing Score"),5))
     
@@ -236,9 +237,12 @@ draw_accuracy_plot <- function(data){
                     sub.score$data.Sutures.2, sub.score$data.Score.3, sub.score$data.Sutures.3,
                     sub.score$data.Score.4, sub.score$data.Sutures.4, sub.score$data.Score.5,
                     sub.score$data.Sutures.5)
+    
+    performance
 
     #...create dataframe using label, task and performance
     subject.performance = data.frame(label, task, performance)
+    subject.performance
 
     #...concate string to create title
     barTitle = paste("Accuracy barplot of subject", subject.name)
