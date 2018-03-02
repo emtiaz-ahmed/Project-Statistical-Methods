@@ -1,6 +1,6 @@
 # Project-Statistical-Methods
 
-## Quality Control ##
+## Task 1: Quality Control ##
 **1. Biographic Data:** Draw the barplot for gender distribution; histogram for age distribution. </br></br>
 **2. Trait Psychometric Data:** Draw the histogram for TAI scores. Please consider only the total TAI score, which can be found at the *tp.csv file residing at the root of each subject file system.</br></br>
 **3. State Psychometric Data:** For each subject draw the barplots for all the NASA-TLX subscales per task. This will give two figures per subject per subscale, one for suturing and one for cutting, where the evolution of the scores from the initial to the final session will be evident. There should be a downward trend, reflecting increased facility with the tasks.</br></br>
