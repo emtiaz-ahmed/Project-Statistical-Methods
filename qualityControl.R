@@ -6,7 +6,7 @@ library(gridExtra)
 library(grid)
 
 #...read input file
-data = read.csv("MicrosurgeryPerformance.csv", header = TRUE, sep=",")
+data = read.csv("Data/MicrosurgeryPerformance.csv", header = TRUE, sep=",")
 
 
 draw_Biographic_Data_plots<-function(data){
@@ -27,7 +27,7 @@ draw_Biographic_Data_plots<-function(data){
     theme(plot.title = element_text(hjust=0.5)) +
     scale_y_continuous(breaks = seq(0,12,by=2), limits = c(0,12))
   
-  ggsave(file="Quality_control/Biographic_data/gender_distribution.png", dpi = 600, width = 10, height = 8, units = "in")
+  ggsave(file="1.Quality_control/Biographic_data/gender_distribution.png", dpi = 600, width = 10, height = 8, units = "in")
   
   #...plot the histogram for age distribution
   ggplot(data, aes(x=data$Age)) + geom_histogram(col="black", fill="dodgerblue1", binwidth = 1) +
@@ -35,7 +35,7 @@ draw_Biographic_Data_plots<-function(data){
     theme(plot.title = element_text(hjust=0.5)) +
     scale_x_continuous(breaks=c(22,23,24,25,26))
   
-  ggsave(file="Quality_control/Biographic_data/age_distribution.png", dpi = 600, width = 10, height = 8, units = "in")
+  ggsave(file="1.Quality_control/Biographic_data/age_distribution.png", dpi = 600, width = 10, height = 8, units = "in")
   
   
 }
@@ -103,7 +103,7 @@ draw_Trait_Psychometric_Data_plots<-function(){
   # outputFile = paste("Quality_control/Trait_Psychometric_data/",".png")
   # ggsave(file="Quality_control/Trait_Psychometric_data/Tai_score_histogram.png", dpi = 600, width = 10, height = 8, units = "in")
    
-  data.tai = read.table("tai_scores.txt") 
+  data.tai = read.table("Data/tai_scores.txt") 
   data.tai
   ggplot(data.tai, aes(data.tai$V2)) +
     geom_histogram(col="black", fill="dodgerblue1", binwidth=1) +
@@ -111,8 +111,8 @@ draw_Trait_Psychometric_Data_plots<-function(){
     theme(plot.title = element_text(hjust=0.5)) +
     scale_x_continuous(breaks = seq(16,56,by=2), limits = c(16,56))
   
-  outputFile = paste("Quality_control/Trait_Psychometric_data/",".png")
-  ggsave(file="Quality_control/Trait_Psychometric_data/Tai_score_histogram.png", dpi = 600, width = 10, height = 8, units = "in")
+  outputFile = paste("1.Quality_control/Trait_Psychometric_data/",".png")
+  ggsave(file="1.Quality_control/Trait_Psychometric_data/Tai_score_histogram.png", dpi = 600, width = 10, height = 8, units = "in")
   
   
   
@@ -174,7 +174,7 @@ draw_timing_plot <- function(data){
       theme(plot.title = element_text(hjust=0.5)) +
       scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20))
     
-    outputFile = paste("Quality_control/Performance_Data/Timing/timing_plot_of_subject_",subject.name,".png")
+    outputFile = paste("1.Quality_control/Performance_Data/Timing/timing_plot_of_subject_",subject.name,".png")
     #...save the output files
     ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
   }
@@ -274,7 +274,7 @@ draw_accuracy_plot <- function(data){
       scale_y_continuous(breaks = seq(0,30,by=2), limits = c(0,30))
   
 
-    outputFile = paste("Quality_control/Performance_Data/Accuracy/accuracy_plot_of_subject_",subject.name,".png")
+    outputFile = paste("1.Quality_control/Performance_Data/Accuracy/accuracy_plot_of_subject_",subject.name,".png")
     #...save the output files
     ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
   }
@@ -285,7 +285,7 @@ draw_accuracy_plot <- function(data){
 
 
 draw_state_psychometric_data<-function(){
-  totalSubject = list.dirs(path = "input", full.names = TRUE, recursive = FALSE)
+  totalSubject = list.dirs(path = "Data", full.names = TRUE, recursive = FALSE)
   totalSubject
   flagg = 1
   
@@ -295,7 +295,7 @@ draw_state_psychometric_data<-function(){
     #...read all tai.csv files from all folders
     # subject.files <- dir("input/subject21", recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
     subject.files <- dir(j, recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
-    subject.file.names <- list.dirs(path = "input", full.names = FALSE, recursive = FALSE)
+    subject.file.names <- list.dirs(path = "Data", full.names = FALSE, recursive = FALSE)
     subject.file.names
     #...find number of files
     total.Nasa.file = length(subject.files)
@@ -359,7 +359,7 @@ draw_state_psychometric_data<-function(){
       scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
       scale_fill_manual(values = c("dodgerblue","plum","gold","deeppink1","springgreen","gray33"))
     
-    outputFile = paste("Quality_control/State_Psychometric_Data/Cutting/nasa_plot_of_subject_",subject.name,".png")
+    outputFile = paste("1.Quality_control/State_Psychometric_Data/Cutting/nasa_plot_of_subject_",subject.name,".png")
     #...save the output files
     ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
     ggplot(nasa.data, aes(x=nasa.label, y=nasa.suturing)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
@@ -369,7 +369,7 @@ draw_state_psychometric_data<-function(){
       scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
       scale_fill_manual(values = c("dodgerblue","plum","gold","deeppink1","springgreen","gray33"))
     
-    outputFile = paste("Quality_control/State_Psychometric_Data/Suturing/nasa_plot_of_subject_",subject.name,".png")
+    outputFile = paste("1.Quality_control/State_Psychometric_Data/Suturing/nasa_plot_of_subject_",subject.name,".png")
     #...save the output files
     ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
     
