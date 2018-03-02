@@ -243,7 +243,7 @@ draw_accuracy_plot <- function(data){
     label = c(rep("Session 1",2), rep("Session 2",2), rep("Session 3",2), rep("Session 4",2),
               rep("Session 5",2))
     #... task label
-    task = c(rep(c("Cutting Score", "Suturing Score"),5))
+    task = c(rep(c("Cutting Score", "Sutures"),5))
     
     #...copy only the scores
     performance = c(sub.score$data.Score.1, sub.score$data.Sutures.1, sub.score$data.Score.2,
