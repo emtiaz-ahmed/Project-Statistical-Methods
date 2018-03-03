@@ -243,7 +243,7 @@ draw_accuracy_plot <- function(data){
     label = c(rep("Session 1",2), rep("Session 2",2), rep("Session 3",2), rep("Session 4",2),
               rep("Session 5",2))
     #... task label
-    task = c(rep(c("Cutting Score", "Sutures"),5))
+    task = c(rep(c("Score", "Sutures"),5))
     
     #...copy only the scores
     performance = c(sub.score$data.Score.1, sub.score$data.Sutures.1, sub.score$data.Score.2,
@@ -353,7 +353,7 @@ draw_state_psychometric_data<-function(){
     
     
     ggplot(nasa.data, aes(x=nasa.label, y=nasa.cutting)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
-      labs(title = barTitle, x = xLabel, y = "Time") +
+      labs(title = barTitle, x = xLabel, y = "Score") +
       theme(plot.title = element_text(hjust=0.5)) +
       labs(fill = "Response") +
       scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
@@ -363,7 +363,7 @@ draw_state_psychometric_data<-function(){
     #...save the output files
     ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
     ggplot(nasa.data, aes(x=nasa.label, y=nasa.suturing)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
-      labs(title = barTitle, x = xLabel, y = "Time") +
+      labs(title = barTitle, x = xLabel, y = "Score") +
       theme(plot.title = element_text(hjust=0.5)) +
       labs(fill = "Response") +
       scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
