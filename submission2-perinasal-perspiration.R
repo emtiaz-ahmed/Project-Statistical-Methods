@@ -5,6 +5,7 @@
 library(gridExtra)
 library(ggplot2)
 library(grid)
+library(dplyr)
 
 
 #-------------------------#
@@ -50,16 +51,40 @@ get_empty_perspiration_df <- function() {
   return(data.frame("Time"=character(0), "Perspiration"=integer(0)))
 }
 
+getDataFrameExceptNanPerspiration <- function(df) {
+  return(df[!is.na(df$Perspiration),])
+}
+
+addNextSecondMeanPerspiration <- function(genuine_df, new_df, i) {
+  data_per_sec <- genuine_df %>% filter (i-1 <= Time & Time < i)
+  new_df <- rbind(new_df, data.frame(Time = i-1, Perspiration = mean(data_per_sec$Perspiration, na.rm=T)))
+  return(new_df)
+}
+
+getPerSecondData <- function(base_df) {
+  per_sec_df <- get_empty_perspiration_df()
+  # per_sec_df <- lapply(1:trunc(max(base_df$Time)), addNextSecondMeanPerspiration, genuine_df = base_df, new_df = per_sec_df)
+  for(i in 1 : ceiling(max(base_df$Time))) {
+    #####################################
+    # per_sec_df <- rbind(per_sec_df,genuine_df %>% filter (i-1 <= Time & Time < i) %>% mutate(Perspiration = mean(Perspiration, na.rm=T), Time=i-1) %>% select(Time, Perspiration) %>% slice(1))
+    #####################################
+    per_sec_df <- addNextSecondMeanPerspiration(base_df, per_sec_df, i)
+  }
+  #THIS WILL RETURN DATA FRAME AFTER DISCARDING THE NA ROWS
+  return(per_sec_df[!is.na(per_sec_df$Perspiration),])
+}
+
 
 #-------------------------#
 #-------Main Program------#
 #-------------------------#
-data_dir <- ".../Data/Methodist microsurgery with output"
-root_image_dir <- ".../OutputImages"
-grid_image_dir <- "GridImages"
+data_dir <- "T:/Google Drive/University of Houston/CS - UH/@@Spring 2018/Statistical Methods for Research/@Project-Stats/Code/Project-Statistical-Methods/Data"
+root_image_dir <- "T:/Google Drive/University of Houston/CS - UH/@@Spring 2018/Statistical Methods for Research/@Project-Stats/Code/Project-Statistical-Methods/2.Quality Control/Perinasal Persipiration"
+grid_image_dir <- "GridGraphs"
 
 setwd(data_dir)
 getwd()
+
 
 baseline_file_pattern <- ".*Baseline..csv"
 cutting_file_pattern <- ".*Cutting..csv"
@@ -72,7 +97,7 @@ subj_list
 
 
 for(subj_idx in 1 : length(subj_list)) {
-  # for(subj_idx in 1 : 2) {
+  # for(subj_idx in 1 : 1) {
   
   x_max_subj <- 0
   y_max_subj <- 0
@@ -93,7 +118,7 @@ for(subj_idx in 1 : length(subj_list)) {
   session_list
   
   for(sess_idx in 1 : length(session_list)) {
-    # for(sess_idx in 1 : 2) {
+    # for(sess_idx in 1 : 1) {
     
     session_name <- session_list[sess_idx]
     total_legend_session <- 0
@@ -112,7 +137,7 @@ for(subj_idx in 1 : length(subj_list)) {
     if(identical(baseline_file_path, character(0))) {
       baseline_df <- get_empty_perspiration_df()
     } else {
-      baseline_df <- read.csv(baseline_file_path)
+      baseline_df <- getPerSecondData(read.csv(baseline_file_path))
       baseline_df$label <- "Baseline"
       color_vector <- union(color_vector, c("black"))
       x_max_subj <- max(x_max_subj, max(baseline_df$Time))
@@ -124,7 +149,7 @@ for(subj_idx in 1 : length(subj_list)) {
     if(identical(cutting_file_path, character(0))) {
       cutting_df <- get_empty_perspiration_df()
     } else {
-      cutting_df <- read.csv(cutting_file_path)
+      cutting_df <- getPerSecondData(read.csv(cutting_file_path))
       cutting_df$label <- "Cutting"
       color_vector <- union(color_vector, c("green"))
       x_max_subj <- max(x_max_subj, max(cutting_df$Time))
@@ -136,7 +161,7 @@ for(subj_idx in 1 : length(subj_list)) {
     if(identical(suturing_file_path, character(0))) {
       suturing_df <- get_empty_perspiration_df()
     } else {
-      suturing_df <- read.csv(suturing_file_path)
+      suturing_df <- getPerSecondData(read.csv(suturing_file_path))
       suturing_df$label <- "Suturing"
       color_vector <- union(color_vector, c("red"))
       x_max_subj <- max(x_max_subj, max(suturing_df$Time))
@@ -189,6 +214,7 @@ for(subj_idx in 1 : length(subj_list)) {
     if (nrow(current_df) != 0) {
       
       single_plot <- ggplot(current_df) +
+        # geom_line(data=getDataFrameExceptNanPerspiration(current_df), aes(Time, Perspiration, colour=label)) +
         geom_line(aes(Time, Perspiration, colour=label)) +
         xlab(x_lab) +
         ylab(y_lab) +
@@ -243,7 +269,7 @@ for(subj_idx in 1 : length(subj_list)) {
   grid_plot <- do.call("grid.arrange", c(plot_list, ncol=1))
   
   ## THIS GRID PLOT CONTAINS THE GRID PLOT AND THE LEGEND
-  grid_plot_title <- paste("Perinasal Perspiration: ", convertToCamelCase(subj_list[subj_idx]))
+  grid_plot_title <- bquote(paste("Perinasal Perspiration [",""^"o","C",""^2,"]: ", .(convertToCamelCase(subj_list[subj_idx]))))
   grid_plot <- grid.arrange(grid_plot, mylegend, nrow=2,heights=c(20, 1), top=textGrob(grid_plot_title, gp=gpar(fontsize=18, font=1)))
   
   ## SAVING GRID PLOT
