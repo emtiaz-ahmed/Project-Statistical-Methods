@@ -109,7 +109,7 @@ draw_Trait_Psychometric_Data_plots<-function(){
     geom_histogram(col="black", fill="dodgerblue1", binwidth=1) +
     labs(title="Histogram of tai scores", x="Tai Score", y="Count") +
     theme(plot.title = element_text(hjust=0.5)) +
-    scale_x_continuous(breaks = seq(16,56,by=2), limits = c(16,56))
+    scale_x_continuous(breaks = seq(20,80,by=2), limits = c(20,80))
   
   outputFile = paste("1.Quality_control/Trait_Psychometric_data/",".png")
   ggsave(file="1.Quality_control/Trait_Psychometric_data/Tai_score_histogram.png", dpi = 600, width = 10, height = 8, units = "in")
