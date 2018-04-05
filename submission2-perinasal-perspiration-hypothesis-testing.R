@@ -1,3 +1,9 @@
+###################################
+###         Add Accuracy       ###
+##################################
+
+
+
 #-------------------------#
 #--------LIBRARIES--------#
 #-------------------------#
@@ -32,30 +38,46 @@ getMean <- function(file_dir, file_name_pattern) {
   
 }
 
+addRow <- function(df, task_name, mean_val, subj_idx, sess_idx) {
+  df <- rbind(df, data.frame(
+                    "Id" = paste0("S", subj_idx, "-S", sess_idx),
+                    "Subject" = paste0("sub", subj_idx),
+                    "Session" = paste0("sess", sess_idx),
+                    "Task" = task_name,
+                    "Mean PP" = mean_val,
+                    stringsAsFactors = F
+                  )
+              )
+  return(df)
+}
+
 convertToCamelCase <- function(x){
   capit <- function(x) paste0(toupper(substring(x, 1, 1)), substring(x, 2, nchar(x)))
   sapply(strsplit(x, "\\."), function(x) paste(capit(x), collapse=""))
 }
 
 # create_subj_dir_mean <- function(subj_name) {
-#   subj_dir_mean <- file.path(mean_output_dir, subj_name)
+#   subj_dir_mean <- file.path(hyp_dir, subj_name)
 #   
 #   if (!file.exists(subj_dir_mean)){
 #     dir.create(subj_dir_mean)
 #   }
 # }
 
-convert_to_csv <- function(mean_df, subj_name) {
-  subj_path_mean <- paste0(file.path(mean_output_dir, subj_name), '.csv')
-  write.csv(mean_df, file = subj_path_mean, row.names = F)
+convert_to_csv <- function(hyp_df, subj_name) {
+  subj_path_mean <- paste0(file.path(hyp_dir, subj_name), '.csv')
+  write.csv(hyp_df, file = subj_path_mean, row.names = F)
 }
 
 #-------------------------#
 #-------Main Program------#
 #-------------------------#
-current_dir <- file_path_as_absolute(".")
+current_dir <- file_path_as_absolute("..")
 data_dir <- concatePath(current_dir,  "Data")
-mean_output_dir <- concatePath(current_dir,  "3.Mean Data")
+hyp_dir <- concatePath(current_dir,  "4.HypothesisData")
+
+# hyp_dir <- dir.create(file.path(current_dir, "4.HypothesisData"), showWarnings = FALSE)
+
 
 setwd(data_dir)
 getwd()
@@ -65,48 +87,51 @@ cutting_file_pattern <- ".*Cutting..csv"
 suturing_file_pattern <- ".*Suturing..csv"
 
 #USE APPLY FAMILY
+?list.dirs
 subj_list <- list.dirs(path=data_dir, full.names=FALSE, recursive=FALSE)
+subj_list <- subj_list[ grepl("subject.*", subj_list) ]
+
+## INITIALIZING EMPTY DATAFRAME ##
+hyp_df <- data.frame(
+  "Id" = character(0),
+  "Subject" = character(0),
+  "Session" = character(0),
+  "Task" = character(0),
+  "Mean PP" = integer(0),
+  check.names = F
+)
 
 
 for(subj_idx in 1 : length(subj_list)) {
-  # for(subj_idx in 8 : 8) {
+# for(subj_idx in 1 : 2) {
   
   subj_name <- subj_list[subj_idx]
+  subj_id <- substr(subj_name, 8, 9)
   subj_dir <- file.path(data_dir, subj_name)
   session_list <- list.dirs(path=subj_dir, full.names=FALSE, recursive=FALSE)
   
-  ## INITIALIZING EMPTY DATAFRAME ##
-  mean_df <- data.frame(
-      "Session Names" = character(0),
-      "Baseline Mean" = integer(0),
-      "Cutting Mean" = integer(0),
-      "Suturing Mean" = integer(0),
-      check.names = F
-    )
   
   for(sess_idx in 1 : length(session_list)) {
-    # for(sess_idx in 1 : 1) {
+  # for(sess_idx in 1 : 1) {
     
     session_name <- session_list[sess_idx]
+    session_id <- substr(session_name, 8, 8)
     session_path <- file.path(subj_name, session_name)
     
-    baseline_mean <- getMean(session_path, baseline_file_pattern)
     cutting_mean <- getMean(session_path, cutting_file_pattern)
     suturing_mean <- getMean(session_path, suturing_file_pattern)
     
     ## APPENDING EACH ROW FOR A SESSION ##
-    mean_df <- rbind(mean_df,
-      data.frame(
-        "Session Names" = convertToCamelCase(session_name),
-        "Baseline Mean" = baseline_mean,
-        "Cutting Mean" = cutting_mean,
-        "Suturing Mean" = suturing_mean,
-        stringsAsFactors = F
-      )
-    )
-    
-    rm(baseline_mean, cutting_mean, suturing_mean)
+    hyp_df <- addRow(hyp_df, 'cutting', cutting_mean, subj_id, session_id)
+    hyp_df <- addRow(hyp_df, 'suturing', suturing_mean, subj_id, session_id)
+
+    rm(cutting_mean, suturing_mean)
   }
   
-  convert_to_csv(mean_df, subj_name)
 }
+
+convert_to_csv(hyp_df, "hyp_test_1")
+
+
+
+
