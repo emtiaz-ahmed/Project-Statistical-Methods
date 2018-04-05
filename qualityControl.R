@@ -225,31 +225,47 @@ draw_timing_plot <- function(data){
 # }
 
 #...draw the accuracy plot for each subject based on their score
-draw_accuracy_plot <- function(data){
+draw_accuracy_plot <- function(){
+  data = read.csv("Data/new_performance/MicrosurgeryPerformance.csv")
+  data
   # #...create dataframe using subject name and all scores
-  score = data.frame(data$Subject,data$Score.1, data$Score.2, data$Score.3, data$Score.4, data$Score.5,
-                     data$Sutures.1, data$Sutures.2, data$Sutures.3, data$Sutures.4, data$Sutures.5)
+  score = data.frame(data$UH.ID, data$Score.Cut1, data$Score.Cut2 , data$Score.Cut1.1, data$Score.Cut2.1,
+                     data$Score.Cut1.2, data$Score.Cut2.2, data$Score.Cut1.3, data$Score.Cut2.3, 
+                     data$Score.Cut1.4, data$Score.Cut2.4, data$Score.Sut1, data$Score.Sut2, 
+                     data$Score.Sut1.1, data$Score.Sut2.1, data$Score.Sut1.2, data$Score.Sut2.2,
+                     data$Score.Sut1.3, data$Score.Sut2.3, data$Score.Sut1.4, data$Score.Sut2.4)
+  # score = data.frame(data$UH,data$Score.1, data$Score.2, data$Score.3, data$Score.4, data$Score.5,
+  #                    data$Sutures.1, data$Sutures.2, data$Sutures.3, data$Sutures.4, data$Sutures.5)
   score
+  # names(score)
   #...find the number of rows
   number.of.row = nrow(score)
 
   for(i in 1:number.of.row){
     #...select specific row from the dataframe
     sub.score = score[i,]
+    sub.score
     #...find the subject number
-    subject.name = sub.score$data.Subject
+    subject.name = sub.score$data.UH.ID
 
     #...create x axis ticks
     label = c(rep("Session 1",2), rep("Session 2",2), rep("Session 3",2), rep("Session 4",2),
               rep("Session 5",2))
     #... task label
-    task = c(rep(c("Score", "Sutures"),5))
+    task = c(rep(c("Cutting", "Suturing"),5))
     
     #...copy only the scores
-    performance = c(sub.score$data.Score.1, sub.score$data.Sutures.1, sub.score$data.Score.2,
-                    sub.score$data.Sutures.2, sub.score$data.Score.3, sub.score$data.Sutures.3,
-                    sub.score$data.Score.4, sub.score$data.Sutures.4, sub.score$data.Score.5,
-                    sub.score$data.Sutures.5)
+    # performance = c(sub.score$data.Score.1, sub.score$data.Sutures.1, sub.score$data.Score.2,
+    #                 sub.score$data.Sutures.2, sub.score$data.Score.3, sub.score$data.Sutures.3,
+    #                 sub.score$data.Score.4, sub.score$data.Sutures.4, sub.score$data.Score.5,
+    #                 sub.score$data.Sutures.5)
+    performance = c(sum(sub.score$data.Score.Cut1 + sub.score$data.Score.Cut2)/2, sum(sub.score$data.Score.Sut1 +
+                    sub.score$data.Score.Sut2)/2, sum(sub.score$data.Score.Cut1.1 + sub.score$data.Score.Cut2.1)/2,
+                    sum(sub.score$data.Score.Sut1.1 + sub.score$data.Score.Sut2.1)/2, sum(sub.score$data.Score.Cut1.2 +
+                    sub.score$data.Score.Cut2.2)/2, sum(sub.score$data.Score.Sut1.2 + sub.score$data.Score.Sut2.2)/2,
+                    sum(sub.score$data.Score.Cut1.3 + sub.score$data.Score.Cut2.3)/2, sum(sub.score$data.Score.Sut1.3 +
+                    sub.score$data.Score.Sut2.3)/2, sum(sub.score$data.Score.Cut1.4 + sub.score$data.Score.Cut2.4)/2,
+                    sum(sub.score$data.Score.Sut1.4 + sub.score$data.Score.Sut2.4)/2)
     
     performance
 
@@ -448,7 +464,7 @@ draw_Biographic_Data_plots(data)
 draw_Trait_Psychometric_Data_plots()
 
 draw_timing_plot(data)
-draw_accuracy_plot(data)
+draw_accuracy_plot()
 
 draw_state_psychometric_data()
 
