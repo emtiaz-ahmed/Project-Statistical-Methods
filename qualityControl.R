@@ -249,23 +249,34 @@ draw_accuracy_plot <- function(){
     subject.name = sub.score$data.UH.ID
 
     #...create x axis ticks
-    label = c(rep("Session 1",2), rep("Session 2",2), rep("Session 3",2), rep("Session 4",2),
-              rep("Session 5",2))
+     # label = c(rep("Session 1",2), rep("Session 2",2), rep("Session 3",2), rep("Session 4",2),
+     #          rep("Session 5",2))
+    label = c(rep("Session 1",4), rep("Session 2",4), rep("Session 3",4), rep("Session 4",4),
+              rep("Session 5",4))
     #... task label
-    task = c(rep(c("Cutting", "Suturing"),5))
+    # task = c(rep(c("Cutting", "Suturing"),5))
+    task = c(rep(c("Cutting 1", "Cutting 2", "Suturing 1", "Suturing 2" ),5))
     
     #...copy only the scores
     # performance = c(sub.score$data.Score.1, sub.score$data.Sutures.1, sub.score$data.Score.2,
     #                 sub.score$data.Sutures.2, sub.score$data.Score.3, sub.score$data.Sutures.3,
     #                 sub.score$data.Score.4, sub.score$data.Sutures.4, sub.score$data.Score.5,
     #                 sub.score$data.Sutures.5)
-    performance = c(sum(sub.score$data.Score.Cut1 + sub.score$data.Score.Cut2)/2, sum(sub.score$data.Score.Sut1 +
-                    sub.score$data.Score.Sut2)/2, sum(sub.score$data.Score.Cut1.1 + sub.score$data.Score.Cut2.1)/2,
-                    sum(sub.score$data.Score.Sut1.1 + sub.score$data.Score.Sut2.1)/2, sum(sub.score$data.Score.Cut1.2 +
-                    sub.score$data.Score.Cut2.2)/2, sum(sub.score$data.Score.Sut1.2 + sub.score$data.Score.Sut2.2)/2,
-                    sum(sub.score$data.Score.Cut1.3 + sub.score$data.Score.Cut2.3)/2, sum(sub.score$data.Score.Sut1.3 +
-                    sub.score$data.Score.Sut2.3)/2, sum(sub.score$data.Score.Cut1.4 + sub.score$data.Score.Cut2.4)/2,
-                    sum(sub.score$data.Score.Sut1.4 + sub.score$data.Score.Sut2.4)/2)
+    # performance = c(sum(sub.score$data.Score.Cut1 + sub.score$data.Score.Cut2)/2, sum(sub.score$data.Score.Sut1 +
+    #                 sub.score$data.Score.Sut2)/2, sum(sub.score$data.Score.Cut1.1 + sub.score$data.Score.Cut2.1)/2,
+    #                 sum(sub.score$data.Score.Sut1.1 + sub.score$data.Score.Sut2.1)/2, sum(sub.score$data.Score.Cut1.2 +
+    #                 sub.score$data.Score.Cut2.2)/2, sum(sub.score$data.Score.Sut1.2 + sub.score$data.Score.Sut2.2)/2,
+    #                 sum(sub.score$data.Score.Cut1.3 + sub.score$data.Score.Cut2.3)/2, sum(sub.score$data.Score.Sut1.3 +
+    #                 sub.score$data.Score.Sut2.3)/2, sum(sub.score$data.Score.Cut1.4 + sub.score$data.Score.Cut2.4)/2,
+    #                 sum(sub.score$data.Score.Sut1.4 + sub.score$data.Score.Sut2.4)/2)
+    
+    performance = c(sub.score$data.Score.Cut1 , sub.score$data.Score.Cut2, sub.score$data.Score.Sut1 ,
+                    sub.score$data.Score.Sut2, sub.score$data.Score.Cut1.1 , sub.score$data.Score.Cut2.1,
+                    sub.score$data.Score.Sut1.1 , sub.score$data.Score.Sut2.1, sub.score$data.Score.Cut1.2 ,
+                    sub.score$data.Score.Cut2.2, sub.score$data.Score.Sut1.2 , sub.score$data.Score.Sut2.2,
+                    sub.score$data.Score.Cut1.3 , sub.score$data.Score.Cut2.3, sub.score$data.Score.Sut1.3 ,
+                    sub.score$data.Score.Sut2.3, sub.score$data.Score.Cut1.4 , sub.score$data.Score.Cut2.4,
+                    sub.score$data.Score.Sut1.4 , sub.score$data.Score.Sut2.4)
     
     performance
 
