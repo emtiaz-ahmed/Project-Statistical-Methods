@@ -226,7 +226,7 @@ draw_timing_plot <- function(data){
 
 #...draw the accuracy plot for each subject based on their score
 draw_accuracy_plot <- function(){
-  data = read.csv("Data/new_performance/MicrosurgeryPerformance.csv")
+  data = read.csv("Data/MicrosurgeryPerformance_new.csv")
   data
   # #...create dataframe using subject name and all scores
   score = data.frame(data$UH.ID, data$Score.Cut1, data$Score.Cut2 , data$Score.Cut1.1, data$Score.Cut2.1,
