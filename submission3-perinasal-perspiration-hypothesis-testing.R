@@ -7,8 +7,10 @@
 #-------------------------#
 #--------LIBRARIES--------#
 #-------------------------#
+install.packages("here")
+
 library(dplyr)
-library(tools)
+library(here)
 
 
 #-------------------------#
@@ -28,7 +30,7 @@ getMean <- function(file_dir, file_name_pattern) {
   file_path <- concatePath(file_dir, file_name)
   
   if(identical(file_path, character(0))) {
-    return('N/A')
+    return('')
   } else {
     df <- read.csv(file_path)
     # return(mean(df[!is.na(df$Perspiration)]))
@@ -66,17 +68,20 @@ convertToCamelCase <- function(x){
 
 convert_to_csv <- function(hyp_df, subj_name) {
   subj_path_mean <- paste0(file.path(hyp_dir, subj_name), '.csv')
-  write.csv(hyp_df, file = subj_path_mean, row.names = F)
+  write.csv(hyp_df, file=subj_path_mean, row.names = F)
 }
 
 #-------------------------#
 #-------Main Program------#
 #-------------------------#
-current_dir <- file_path_as_absolute("..")
+current_dir <- here()
 data_dir <- concatePath(current_dir,  "Data")
 hyp_dir <- concatePath(current_dir,  "4.HypothesisData")
 
 # hyp_dir <- dir.create(file.path(current_dir, "4.HypothesisData"), showWarnings = FALSE)
+
+score_data <- read.csv(concatePath(data_dir, 'MicrosurgeryPerformance.csv'))
+subj_id_list <- score_data$ID
 
 
 setwd(data_dir)
@@ -107,37 +112,48 @@ for(subj_idx in 1 : length(subj_list)) {
   
   subj_name <- subj_list[subj_idx]
   subj_id <- substr(subj_name, 8, 9)
-  subj_dir <- file.path(data_dir, subj_name)
-  session_list <- list.dirs(path=subj_dir, full.names=FALSE, recursive=FALSE)
+  print(as.numeric(subj_id))
   
-  
-  for(sess_idx in 1 : length(session_list)) {
-  # for(sess_idx in 1 : 1) {
+  if(is.element(as.numeric(subj_id), subj_id_list)) {
     
-    session_name <- session_list[sess_idx]
-    session_id <- substr(session_name, 8, 8)
-    session_path <- file.path(subj_name, session_name)
+    subj_dir <- file.path(data_dir, subj_name)
+    session_list <- list.dirs(path=subj_dir, full.names=FALSE, recursive=FALSE)
     
-    cutting_mean <- getMean(session_path, cutting_file_pattern)
-    suturing_mean <- getMean(session_path, suturing_file_pattern)
     
-    ## APPENDING EACH ROW FOR A SESSION ##
-    hyp_df <- addRow(hyp_df, 'cutting', cutting_mean, subj_id, session_id)
-    hyp_df <- addRow(hyp_df, 'suturing', suturing_mean, subj_id, session_id)
-
-    rm(cutting_mean, suturing_mean)
+    for(sess_idx in 1 : length(session_list)) {
+      # for(sess_idx in 1 : 1) {
+      
+      session_name <- session_list[sess_idx]
+      session_id <- substr(session_name, 8, 8)
+      session_path <- file.path(subj_name, session_name)
+      
+      baseline_mean <- getMean(session_path, baseline_file_pattern)
+      cutting_mean <- getMean(session_path, cutting_file_pattern)
+      suturing_mean <- getMean(session_path, suturing_file_pattern)
+      
+      if (is.numeric(baseline_mean)) {
+        if (is.numeric(cutting_mean)) {
+          cutting_mean <- baseline_mean - cutting_mean
+        }
+        if (is.numeric(suturing_mean)) {
+          suturing_mean <- baseline_mean - suturing_mean
+        }
+      }
+      
+      
+      # cutting_mean <- getMean(session_path, cutting_file_pattern)
+      # suturing_mean <- getMean(session_path, suturing_file_pattern)
+      
+      ## APPENDING EACH ROW FOR A SESSION ##
+      hyp_df <- addRow(hyp_df, 'cutting', cutting_mean, subj_id, session_id)
+      hyp_df <- addRow(hyp_df, 'suturing', suturing_mean, subj_id, session_id)
+      
+      rm(cutting_mean, suturing_mean)
+    }
+    
   }
-  
 }
 
-convert_to_csv(hyp_df, "hyp_test_1")
-
-
-
-# setwd(concatePath(current_dir,  "new_performance"))
-# score_data <- read.csv("MicrosurgeryPerformance.csv")
-# str(score_data)
-
-
+convert_to_csv(hyp_df, "hyp_test_3_final")
 
 
