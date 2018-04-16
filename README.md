@@ -20,9 +20,10 @@ Please also note that you can (and should) formulate more hypotheses and apply a
 Although there are many differences with the current microsurgery project, still the two studies are in the broader area of surgical education, and at the very least you can see in that SREP paper how to properly construct statistical figures and articulate conclusions based on the results of statistical tests.
 
 **Units**:
-Gender: Male=1, Female=2
-Cutting time: 10
-Suturing time: 20
-Sutures: 0-6
-Score: 6-30
+</br>
+Gender: Male=1, Female=2 </br>
+Cutting time: 10 </br>
+Suturing time: 20 </br>
+Sutures: 0-6 </br>
+Score: 6-30 </br>
 
