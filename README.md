@@ -18,3 +18,11 @@ Please also note that you can (and should) formulate more hypotheses and apply a
 **EXEMPLARY ANALYSIS** An exemplary analysis of laparoscopic surgical education has been published by Pavlidis et al. here: https://www.nature.com/articles/srep00305
 
 Although there are many differences with the current microsurgery project, still the two studies are in the broader area of surgical education, and at the very least you can see in that SREP paper how to properly construct statistical figures and articulate conclusions based on the results of statistical tests.
+
+**Units**:
+Gender: Male=1, Female=2
+Cutting time: 10
+Suturing time: 20
+Sutures: 0-6
+Score: 6-30
+
