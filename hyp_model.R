@@ -119,15 +119,21 @@ summary(model16)
 # AIC      BIC   logLik deviance df.resid 
 # 1367.2   1476.7   -653.6   1307.2      254 
 
-model16 = lmer(score ~ log(meanPP) + session + task  + 1|subject, data=required.df, REML=FALSE)
-summary(model16)
+model17 = lmer(score ~ log(meanPP) + session + task  + 1|subject, data=required.df, REML=FALSE)
+summary(model17)
 
 #lowest AIC
 # AIC      BIC   logLik deviance df.resid 
 # 567.8    647.7   -253.9    507.8       76
 
 
+anova(model15, model17)
 
+
+model2.1 = lm(score ~ log(meanPP) + session + task, data=required.df)
+summary(model2.1)
+
+anova(model17, model2.1)
 
 
 # 
