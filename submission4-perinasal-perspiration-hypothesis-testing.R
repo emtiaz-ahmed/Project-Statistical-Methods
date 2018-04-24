@@ -8,20 +8,6 @@ library(here)
 #-------------------------#
 #---FUNCTION DEFINITION---#
 #-------------------------#
-concatePath <- function(path1, path2) {
-  file.path(path1, path2)
-}
-
-findFileAndSetPath <- function(file_dir, file_name_pattern) {
-  file_name <- list.files(path=file_dir, pattern=file_name_pattern, recursive=FALSE)
-  concatePath(file_dir, file_name)
-}
-
-convertToCamelCase <- function(x){
-  capit <- function(x) paste0(toupper(substring(x, 1, 1)), substring(x, 2, nchar(x)))
-  sapply(strsplit(x, "\\."), function(x) paste(capit(x), collapse=""))
-}
-
 convert_to_csv <- function(hyp_df, output_file) {
   file_path <- paste0(file.path(hyp_dir, output_file), '.csv')
   write.csv(hyp_df, file=file_path, row.names = F)
