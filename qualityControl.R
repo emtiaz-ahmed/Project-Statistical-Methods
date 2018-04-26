@@ -132,9 +132,9 @@ draw_Trait_Psychometric_Data_plots<-function(){
 #...draw the timing plots for each subject based on their cutting and suturing time
 draw_timing_plot <- function(data){
   #...create dataframe using subject name and all cutting time
-  cut.timing = data.frame(data$Subject, data$Cutting.Time.1, data$Cutting.Time.2, data$Cutting.Time.3, data$Cutting.Time.4, data$Cutting.Time.5)
+  cut.timing = data.frame(data$ID, data$Cutting.Time.1, data$Cutting.Time.2, data$Cutting.Time.3, data$Cutting.Time.4, data$Cutting.Time.5)
   #...create dataframe using subject name and all suturing time
-  sut.timing = data.frame(data$Subject, data$Suturing.Time.1 , data$Suturing.Time.2, data$Suturing.Time.3,
+  sut.timing = data.frame(data$ID, data$Suturing.Time.1 , data$Suturing.Time.2, data$Suturing.Time.3,
                                  data$Suturing.Time.4, data$Suturing.Time.5)
   #...find the number of rows
   number.of.row = nrow(cut.timing)
@@ -144,7 +144,7 @@ draw_timing_plot <- function(data){
     sub.timing.cut = cut.timing[i,]
     sub.timing.sut = sut.timing[i,] 
     #...find the subject number
-    subject.name = sub.timing.cut$data.Subject
+    subject.name = paste("Subject",sub.timing.cut$data.ID,sep=" ")
     
     #...create x axis ticks
     label = c(rep("Session 1",2), rep("Session 2",2), rep("Session 3",2), rep("Session 4",2), rep("Session 5",2))
@@ -174,16 +174,18 @@ draw_timing_plot <- function(data){
     subject.timing = data.frame(label, tasks, timing)
     
     #...concate string to create title
-    barTitle = paste("Timing barplot of subject", subject.name)
+    barTitle = paste("Timing barplot of", subject.name)
     xLabel = paste("Subject", subject.name)
     
    
     ggplot(subject.timing, aes(x=label, y=timing)) + geom_bar(aes(fill=tasks), position = "dodge", stat="identity") +
-      labs(title = barTitle, x = xLabel, y = "Time") +
+      labs(title = barTitle, x = "", y = "Time") +
+      labs(fill = "Tasks") +
+      theme_bw() +
       theme(plot.title = element_text(hjust=0.5)) +
       scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20))
     
-    outputFile = paste("1.Quality_control/Performance_Data/Timing/timing_plot_of_subject_",subject.name,".png")
+    outputFile = paste("1.Quality_control/Performance_Data/Timing/timing_plot_of_",subject.name,".png")
     #...save the output files
     ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
   }
@@ -235,10 +237,10 @@ draw_timing_plot <- function(data){
 
 #...draw the accuracy plot for each subject based on their score
 draw_accuracy_plot <- function(){
-  data = read.csv("Data/MicrosurgeryPerformance_new.csv")
+  data = read.csv("Data/MicrosurgeryPerformance.csv")
   data
   # #...create dataframe using subject name and all scores
-  score = data.frame(data$UH.ID, data$Score.Cut1, data$Score.Cut2 , data$Score.Cut1.1, data$Score.Cut2.1,
+  score = data.frame(data$ID, data$Score.Cut1, data$Score.Cut2 , data$Score.Cut1.1, data$Score.Cut2.1,
                      data$Score.Cut1.2, data$Score.Cut2.2, data$Score.Cut1.3, data$Score.Cut2.3, 
                      data$Score.Cut1.4, data$Score.Cut2.4, data$Score.Sut1, data$Score.Sut2, 
                      data$Score.Sut1.1, data$Score.Sut2.1, data$Score.Sut1.2, data$Score.Sut2.2,
@@ -255,7 +257,7 @@ draw_accuracy_plot <- function(){
     sub.score = score[i,]
     sub.score
     #...find the subject number
-    subject.name = sub.score$data.UH.ID
+    subject.name = paste("Subject",sub.score$data.ID,sep=" ")
 
     #...create x axis ticks
      # label = c(rep("Session 1",2), rep("Session 2",2), rep("Session 3",2), rep("Session 4",2),
@@ -294,7 +296,7 @@ draw_accuracy_plot <- function(){
     subject.performance
 
     #...concate string to create title
-    barTitle = paste("Accuracy barplot of subject", subject.name)
+    barTitle = paste("Accuracy barplot of", subject.name)
     xLabel = paste("Subject", subject.name)
 
     #...plot the graph
@@ -304,13 +306,14 @@ draw_accuracy_plot <- function(){
     #   scale_y_continuous(breaks = seq(0,30,by=5), limits = c(0,30))
     
     ggplot(subject.performance, aes(x = label, y = performance)) + geom_bar(aes(fill=task), position = "dodge", stat="identity", width = 0.8, col="black") +
-      labs(title = barTitle, x = xLabel, y = "Score") +
+      labs(title = barTitle, x = "", y = "Score") +
+      theme_bw() + 
       theme(plot.title = element_text(hjust=0.5)) +
       labs(fill = "Tasks") +
       scale_y_continuous(breaks = seq(0,30,by=2), limits = c(0,30))
   
 
-    outputFile = paste("1.Quality_control/Performance_Data/Accuracy/accuracy_plot_of_subject_",subject.name,".png")
+    outputFile = paste("1.Quality_control/Performance_Data/Accuracy/accuracy_plot_of_",subject.name,".png")
     #...save the output files
     ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
   }
