@@ -24,16 +24,21 @@ draw_Biographic_Data_plots<-function(data){
     scale_fill_manual(values = c("deeppink1","dodgerblue1")) +
     labs(title="Barplot of Gender distribution", x="Gender", y="Count") +
     guides(fill=FALSE) +
-    theme(plot.title = element_text(hjust=0.5)) +
-    scale_y_continuous(breaks = seq(0,12,by=2), limits = c(0,12))
+    scale_y_continuous(breaks = seq(0,12,by=2), limits = c(0,12)) +
+    geom_text(aes(label=genders), vjust=0, nudge_y = 0.1) +
+    theme_bw() +
+    theme(plot.title = element_text(hjust=0.5))
   
   ggsave(file="1.Quality_control/Biographic_data/gender_distribution.png", dpi = 600, width = 10, height = 8, units = "in")
   
   #...plot the histogram for age distribution
   ggplot(data, aes(x=data$Age)) + geom_histogram(col="black", fill="dodgerblue1", binwidth = 1) +
     labs(title="Histogram of Age distribution", x="Age", y="Count") +
-    theme(plot.title = element_text(hjust=0.5)) +
-    scale_x_continuous(breaks=c(22,23,24,25,26))
+    scale_x_continuous(breaks=c(22,23,24,25,26))+
+    theme_bw() +
+    geom_text(stat='count', aes(label=..count..), vjust=0, nudge_y = 0.1) +
+    theme(plot.title = element_text(hjust=0.5))
+    
   
   ggsave(file="1.Quality_control/Biographic_data/age_distribution.png", dpi = 600, width = 10, height = 8, units = "in")
   
@@ -103,13 +108,17 @@ draw_Trait_Psychometric_Data_plots<-function(){
   # outputFile = paste("Quality_control/Trait_Psychometric_data/",".png")
   # ggsave(file="Quality_control/Trait_Psychometric_data/Tai_score_histogram.png", dpi = 600, width = 10, height = 8, units = "in")
    
-  data.tai = read.table("Data/tai_scores.txt") 
-  data.tai
+  data.tai = read.table("Data/tai_scores.txt")
+  
+  #remove specific rows , because all subjects are not available in final file
+  data.tai = data.tai[-c(5,6,9,15,18,20),]
+
   ggplot(data.tai, aes(data.tai$V2)) +
     geom_histogram(col="black", fill="dodgerblue1", binwidth=1) +
     labs(title="Histogram of tai scores", x="Tai Score", y="Count") +
-    theme(plot.title = element_text(hjust=0.5)) +
-    scale_x_continuous(breaks = seq(20,80,by=2), limits = c(20,80))
+    scale_x_continuous(breaks = seq(20,80,by=2), limits = c(20,80)) +
+    theme_bw() +
+    theme(plot.title = element_text(hjust=0.5))
   
   outputFile = paste("1.Quality_control/Trait_Psychometric_data/",".png")
   ggsave(file="1.Quality_control/Trait_Psychometric_data/Tai_score_histogram.png", dpi = 600, width = 10, height = 8, units = "in")
@@ -313,16 +322,20 @@ draw_accuracy_plot <- function(){
 
 draw_state_psychometric_data<-function(){
   totalSubject = list.dirs(path = "Data", full.names = TRUE, recursive = FALSE)
+  #removed specific subjects, because they are not in final file
+  totalSubject = totalSubject[-c(5,6,9,15,18,20)]
   totalSubject
   flagg = 1
   
   for(j in totalSubject){
-    # dir.name = paste("input/", "subject01" )
+    # dir.name = paste("input/", "subject26" )
     # dir.name
     #...read all tai.csv files from all folders
-    # subject.files <- dir("input/subject21", recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
+     # subject.files <- dir("input/subject26", recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
     subject.files <- dir(j, recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
     subject.file.names <- list.dirs(path = "Data", full.names = FALSE, recursive = FALSE)
+    #removed specific subjects, because they are not in final file
+    subject.file.names = subject.file.names[-c(5,6,9,15,18,20)]
     subject.file.names
     #...find number of files
     total.Nasa.file = length(subject.files)
@@ -380,7 +393,8 @@ draw_state_psychometric_data<-function(){
     
     
     ggplot(nasa.data, aes(x=nasa.label, y=nasa.cutting)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
-      labs(title = barTitle, x = xLabel, y = "Score") +
+      labs(title = barTitle, x = "", y = "Score") +
+      theme_bw() +
       theme(plot.title = element_text(hjust=0.5)) +
       labs(fill = "Response") +
       scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
@@ -390,7 +404,7 @@ draw_state_psychometric_data<-function(){
     #...save the output files
     ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
     ggplot(nasa.data, aes(x=nasa.label, y=nasa.suturing)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
-      labs(title = barTitle, x = xLabel, y = "Score") +
+      labs(title = barTitle, x = "", y = "Score") + theme_bw() +
       theme(plot.title = element_text(hjust=0.5)) +
       labs(fill = "Response") +
       scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
