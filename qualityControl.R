@@ -1,5 +1,5 @@
 setwd("E:/Github/1.project/Project-Statistical-Methods")
-#getwd()
+
 library(ggplot2)
 library(lubridate)
 library(gridExtra)
@@ -41,73 +41,10 @@ draw_Biographic_Data_plots<-function(data){
     
   
   ggsave(file="1.Quality_control/Biographic_data/age_distribution.png", dpi = 600, width = 10, height = 8, units = "in")
-  
-  
+
 }
 
 draw_Trait_Psychometric_Data_plots<-function(){
-  # #...read all tai.csv files from all folders
-  # files <- dir("input", recursive=TRUE, full.names=TRUE, pattern="*_tai.csv$")
-  # #...find number of files
-  # total.file = length(files)
-  # 
-  # temp = read.csv(files[1], header = FALSE)
-  # #...list the questions
-  # questions = temp$V1
-  # #...read all the scores and create a list
-  # flag1 = 1
-  # tai.score = list()
-  # for(i in files){
-  #   trait.data = read.csv(i,header=FALSE)
-  #   tai.score[flag1] = list(trait.data$V2)
-  #   flag1 = flag1 + 1
-  #   
-  # }
-  # #...create dataframe of all scores
-  # trait.tai <-as.data.frame(matrix(unlist(tai.score), nrow=total.file, ncol=20, byrow=TRUE))
-  # 
-  # #...draw plots for each question
-  # for(i in 1:ncol(trait.tai)){
-  #   #...plot the histogram for tai scores
-  #   ggplot(trait.tai, aes(x=trait.tai[i])) + geom_histogram(col="black", fill="dodgerblue1", binwidth=1) +
-  #     labs(title="Histogram of tai scores", x="Score", y="Count") +
-  #     theme(plot.title = element_text(hjust=0.5)) +
-  #     scale_y_continuous(breaks = seq(0,21,by=2), limits = c(0,21)) +
-  #     scale_x_continuous(breaks = seq(0,6,by=1), limits = c(0,6))
-  #   
-  #   outputFile = paste("Quality_control/Trait_Psychometric_data/",questions[i],".png")
-  #   ggsave(file=outputFile, dpi = 600, width = 10, height = 8, units = "in")
-    
-  
-  #}
-  # #...read all tai.csv files from all folders
-  # files <- dir("input", recursive=TRUE, full.names=TRUE, pattern="*_tp.csv$")
-  # files
-  # #...find number of files
-  # total.file = length(files)
-  # total.file
-  # 
-  # tai.score = list()
-  # flag = 1
-  # for(i in files){
-  #   tai.data = read.csv(i, header = FALSE)
-  #   tai.data
-  #   tai.score[flag] = list(tai.data$V2[1])
-  #   flag = flag + 1
-  #   
-  # }
-  # tai.df = as.data.frame(unlist(tai.score))
-  # tai.df
-  # 
-  # ggplot(tai.df, aes(tai.df$`unlist(tai.score)`)) +
-  #   geom_histogram(col="black", fill="dodgerblue1", binwidth=1) +
-  #   labs(title="Histogram of tai scores", x="Tai Score", y="Count") +
-  #   theme(plot.title = element_text(hjust=0.5)) +
-  #   scale_x_continuous(breaks = seq(24,56,by=2), limits = c(24,56))
-  # 
-  # outputFile = paste("Quality_control/Trait_Psychometric_data/",".png")
-  # ggsave(file="Quality_control/Trait_Psychometric_data/Tai_score_histogram.png", dpi = 600, width = 10, height = 8, units = "in")
-   
   data.tai = read.table("Data/tai_scores.txt")
   
   #remove specific rows , because all subjects are not available in final file
@@ -122,9 +59,7 @@ draw_Trait_Psychometric_Data_plots<-function(){
   
   outputFile = paste("1.Quality_control/Trait_Psychometric_data/",".png")
   ggsave(file="1.Quality_control/Trait_Psychometric_data/Tai_score_histogram.png", dpi = 600, width = 10, height = 8, units = "in")
-  
-  
-  
+
 }
 
 
@@ -194,46 +129,7 @@ draw_timing_plot <- function(data){
   
 }
 
-#...draw the accuracy plot for each subject based on their score
-# draw_accuracy_plot <- function(data){
-#   #...create dataframe using subject name and all scores
-#   score = data.frame(data$Subject,data$Score.1, data$Score.2, data$Score.3, data$Score.4, data$Score.5)
-#   score
-#   #...find the number of rows
-#   number.of.row = nrow(score)
-#   
-#   for(i in 1:number.of.row){
-#     #...select specific row from the dataframe
-#     sub.score = score[i,] 
-#     #...find the subject number
-#     subject.name = sub.score$data.Subject
-#     
-#     #...create x axis ticks
-#     label = c("Session 1", "Session 2", "Session 3", "Session 4", "Session 5")
-#     #...copy only the scores
-#     performance = c(sub.score$data.Score.1, sub.score$data.Score.2, sub.score$data.Score.3, sub.score$data.Score.4, sub.score$data.Score.5)
-#     
-#     #...create dataframe using label and performance
-#     subject.performance = data.frame(label, performance)
-#     
-#     #...concate string to create title
-#     barTitle = paste("Accuracy barplot of subject", subject.name)
-#     xLabel = paste("Subject", subject.name)
-#     
-#     #...plot the graph
-#     ggplot(subject.performance, aes(x = label, y = performance)) + geom_bar(stat="identity", col = "black", fill="dodgerblue1") +
-#       labs(title = barTitle, x = xLabel, y = "Score") +
-#       theme(plot.title = element_text(hjust=0.5)) + 
-#       scale_y_continuous(breaks = seq(0,30,by=5), limits = c(0,30))
-#     
-#     outputFile = paste("Quality_control/Performance_Data/Accuracy/accuracy_plot_of_subject_",subject.name,".png")
-#     #...save the output files
-#     ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
-#   }
-#   
-#   
-#   
-# }
+
 
 #...draw the accuracy plot for each subject based on their score
 draw_accuracy_plot <- function(){
@@ -260,26 +156,11 @@ draw_accuracy_plot <- function(){
     subject.name = paste("Subject",sub.score$data.ID,sep=" ")
 
     #...create x axis ticks
-     # label = c(rep("Session 1",2), rep("Session 2",2), rep("Session 3",2), rep("Session 4",2),
-     #          rep("Session 5",2))
     label = c(rep("Session 1",4), rep("Session 2",4), rep("Session 3",4), rep("Session 4",4),
               rep("Session 5",4))
     #... task label
-    # task = c(rep(c("Cutting", "Suturing"),5))
     task = c(rep(c("Cutting 1", "Cutting 2", "Suturing 1", "Suturing 2" ),5))
     
-    #...copy only the scores
-    # performance = c(sub.score$data.Score.1, sub.score$data.Sutures.1, sub.score$data.Score.2,
-    #                 sub.score$data.Sutures.2, sub.score$data.Score.3, sub.score$data.Sutures.3,
-    #                 sub.score$data.Score.4, sub.score$data.Sutures.4, sub.score$data.Score.5,
-    #                 sub.score$data.Sutures.5)
-    # performance = c(sum(sub.score$data.Score.Cut1 + sub.score$data.Score.Cut2)/2, sum(sub.score$data.Score.Sut1 +
-    #                 sub.score$data.Score.Sut2)/2, sum(sub.score$data.Score.Cut1.1 + sub.score$data.Score.Cut2.1)/2,
-    #                 sum(sub.score$data.Score.Sut1.1 + sub.score$data.Score.Sut2.1)/2, sum(sub.score$data.Score.Cut1.2 +
-    #                 sub.score$data.Score.Cut2.2)/2, sum(sub.score$data.Score.Sut1.2 + sub.score$data.Score.Sut2.2)/2,
-    #                 sum(sub.score$data.Score.Cut1.3 + sub.score$data.Score.Cut2.3)/2, sum(sub.score$data.Score.Sut1.3 +
-    #                 sub.score$data.Score.Sut2.3)/2, sum(sub.score$data.Score.Cut1.4 + sub.score$data.Score.Cut2.4)/2,
-    #                 sum(sub.score$data.Score.Sut1.4 + sub.score$data.Score.Sut2.4)/2)
     
     performance = c(sub.score$data.Score.Cut1 , sub.score$data.Score.Cut2, sub.score$data.Score.Sut1 ,
                     sub.score$data.Score.Sut2, sub.score$data.Score.Cut1.1 , sub.score$data.Score.Cut2.1,
@@ -299,12 +180,7 @@ draw_accuracy_plot <- function(){
     barTitle = paste("Accuracy barplot of", subject.name)
     xLabel = paste("Subject", subject.name)
 
-    #...plot the graph
-    # ggplot(subject.performance, aes(x = label, y = performance)) + geom_bar(stat="identity", col = "black", fill="dodgerblue1") +
-    #   labs(title = barTitle, x = xLabel, y = "Score") +
-    #   theme(plot.title = element_text(hjust=0.5)) +
-    #   scale_y_continuous(breaks = seq(0,30,by=5), limits = c(0,30))
-    
+   
     ggplot(subject.performance, aes(x = label, y = performance)) + geom_bar(aes(fill=task), position = "dodge", stat="identity", width = 0.8, col="black") +
       labs(title = barTitle, x = "", y = "Score") +
       theme_bw() + 
@@ -428,65 +304,6 @@ draw_state_psychometric_data<-function(){
 
 
 
-# draw_perinasal_Perspiration_Signal_Data<-function(){
-#   folder.list = list.dirs(path = "input", full.names = TRUE, recursive = FALSE)
-#   folder.list
-#   
-#   for(folderName in folder.list){
-#     # subFolder.list = list.dirs(path = folderName, full.names = TRUE, recursive = FALSE)
-#     subFolder.list = list.dirs(path = "input/subject01", full.names = TRUE, recursive = FALSE)
-#     subFolder.list
-#     
-#     allPlot.list = list()
-#     pflag = 1
-#     for(subFolderName in subFolder.list){
-#       # subFolderNam = "input/subject01/session2" 
-#       baseline.file = dir(subFolderName, recursive=FALSE, full.names=TRUE, pattern="*Baseline.*.csv$")
-#       cutting.file = dir(subFolderName, recursive=FALSE, full.names=TRUE, pattern="*Cutting[0-9]*.csv$")
-#       suturing.file = dir(subFolderName, recursive=FALSE, full.names=TRUE, pattern="*Suturing[0-9]*.csv$")
-#       
-#       # baseline.file = dir("input/subject01/session2", recursive=FALSE, full.names=TRUE, pattern="*Baseline.*.csv$")
-#       # cutting.file = dir("input/subject01/session2", recursive=FALSE, full.names=TRUE, pattern="*Cutting[0-9]*.csv$")
-#       # suturing.file = dir("input/subject01/session2", recursive=FALSE, full.names=TRUE, pattern="*Suturing[0-9]*.csv$")
-#       baseline.file
-#       cutting.file
-#       suturing.file
-#       baseline.data = read.csv(baseline.file)
-#       baseline.data
-#       cuting.data = read.csv(cutting.file)
-#       cuting.data
-#       suturing.data = read.csv(suturing.file)
-#       suturing.data
-#       
-#       p = ggplot() + geom_line(data=baseline.data, aes(baseline.data$Time, baseline.data$Perspiration), col="black") +
-#         geom_line(data=cuting.data, aes(cuting.data$Time, cuting.data$Perspiration), col="green") +
-#         geom_line(data=suturing.data, aes(suturing.data$Time, suturing.data$Perspiration), col="red") +
-#         labs(x="Time", y="Perspiration")
-#       
-#       p
-#       allPlot.list[[pflag]] = p
-#       
-#       pflag = pflag + 1
-#       
-#     }
-#     
-#     # allPlot.list
-#     
-#     n <- length(allPlot.list)
-#     nCol <- floor(sqrt(n))
-#     
-#     png("Quality_control/Perinasal_Perspiration_(Stress)_Signal_Data/s1.png")
-#     do.call(grid.arrange, c(allPlot.list, list(ncol=nCol)))
-#     # grid.arrange(grobs=allPlot.list, ncol=nCol)
-#     # outputFile = paste("Quality_control/State_Psychometric_Data/Suturing/nasa_plot_of_subject_",subject.name,".png")
-#     #...save the output files
-#     dev.off()
-#   }
-#   
-# }
-
-
-
 
 draw_Biographic_Data_plots(data)
 draw_Trait_Psychometric_Data_plots()
@@ -496,6 +313,6 @@ draw_accuracy_plot()
 
 draw_state_psychometric_data()
 
-# draw_perinasal_Perspiration_Signal_Data()
+
 
 
