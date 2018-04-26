@@ -25,7 +25,9 @@ draw_Biographic_Data_plots<-function(data){
     labs(title="Barplot of Gender distribution", x="Gender", y="Count") +
     guides(fill=FALSE) +
     theme(plot.title = element_text(hjust=0.5)) +
-    scale_y_continuous(breaks = seq(0,12,by=2), limits = c(0,12))
+    scale_y_continuous(breaks = seq(0,12,by=2), limits = c(0,12)) +
+    geom_text(aes(label=genders), vjust=0, nudge_y = 0.1) +
+    theme_bw()
   
   ggsave(file="1.Quality_control/Biographic_data/gender_distribution.png", dpi = 600, width = 10, height = 8, units = "in")
   
@@ -33,7 +35,10 @@ draw_Biographic_Data_plots<-function(data){
   ggplot(data, aes(x=data$Age)) + geom_histogram(col="black", fill="dodgerblue1", binwidth = 1) +
     labs(title="Histogram of Age distribution", x="Age", y="Count") +
     theme(plot.title = element_text(hjust=0.5)) +
-    scale_x_continuous(breaks=c(22,23,24,25,26))
+    scale_x_continuous(breaks=c(22,23,24,25,26))+
+    theme_bw() +
+    geom_text(stat='count', aes(label=..count..), vjust=0, nudge_y = 0.1)
+    
   
   ggsave(file="1.Quality_control/Biographic_data/age_distribution.png", dpi = 600, width = 10, height = 8, units = "in")
   
