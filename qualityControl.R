@@ -322,16 +322,20 @@ draw_accuracy_plot <- function(){
 
 draw_state_psychometric_data<-function(){
   totalSubject = list.dirs(path = "Data", full.names = TRUE, recursive = FALSE)
+  #removed specific subjects, because they are not in final file
+  totalSubject = totalSubject[-c(5,6,9,15,18,20)]
   totalSubject
   flagg = 1
   
   for(j in totalSubject){
-    # dir.name = paste("input/", "subject01" )
+    # dir.name = paste("input/", "subject26" )
     # dir.name
     #...read all tai.csv files from all folders
-    # subject.files <- dir("input/subject21", recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
+     # subject.files <- dir("input/subject26", recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
     subject.files <- dir(j, recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
     subject.file.names <- list.dirs(path = "Data", full.names = FALSE, recursive = FALSE)
+    #removed specific subjects, because they are not in final file
+    subject.file.names = subject.file.names[-c(5,6,9,15,18,20)]
     subject.file.names
     #...find number of files
     total.Nasa.file = length(subject.files)
@@ -389,7 +393,8 @@ draw_state_psychometric_data<-function(){
     
     
     ggplot(nasa.data, aes(x=nasa.label, y=nasa.cutting)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
-      labs(title = barTitle, x = xLabel, y = "Score") +
+      labs(title = barTitle, x = "", y = "Score") +
+      theme_bw() +
       theme(plot.title = element_text(hjust=0.5)) +
       labs(fill = "Response") +
       scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
@@ -399,7 +404,7 @@ draw_state_psychometric_data<-function(){
     #...save the output files
     ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
     ggplot(nasa.data, aes(x=nasa.label, y=nasa.suturing)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
-      labs(title = barTitle, x = xLabel, y = "Score") +
+      labs(title = barTitle, x = "", y = "Score") + theme_bw() +
       theme(plot.title = element_text(hjust=0.5)) +
       labs(fill = "Response") +
       scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
