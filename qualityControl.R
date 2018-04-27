@@ -7,7 +7,7 @@ library(grid)
 
 #...read input file
 data = read.csv("Data/MicrosurgeryPerformance.csv", header = TRUE, sep=",")
-
+data
 
 draw_Biographic_Data_plots<-function(data){
   label = c("Male", "Female")
@@ -303,6 +303,49 @@ draw_state_psychometric_data<-function(){
 }
 
 
+#...draw the accuracy plot for each subject based on their score
+draw_accuracy_plot_combined <- function(){
+  data = read.csv("Data/MicrosurgeryPerformance.csv")
+  data
+  
+  
+  
+  #...create x axis ticks
+  label = c(rep("Session 1",4), rep("Session 2",4), rep("Session 3",4), rep("Session 4",4),
+            rep("Session 5",4))
+  #... task label
+  task = c(rep(c("Cutting Score 1", "Cutting Score 2", "Suturing Score 1", "Suturing Score 2" ),5))
+  
+  # #...create dataframe using subject name and all scores
+  score = c(mean(data$Score.Cut1), mean(data$Score.Cut2) , mean(data$Score.Sut1), mean(data$Score.Sut2), 
+            mean(data$Score.Cut1.1),mean(data$Score.Cut2.1), mean(data$Score.Sut1.1), mean(data$Score.Sut2.1),
+            mean(data$Score.Cut1.2), mean(data$Score.Cut2.2),mean(data$Score.Sut1.2),mean(data$Score.Sut2.2),
+            mean(data$Score.Cut1.3), mean(data$Score.Cut2.3), mean(data$Score.Sut1.3),mean(data$Score.Sut2.3),
+            mean(data$Score.Cut1.4),mean(data$Score.Cut2.4), mean(data$Score.Sut1.4), mean(data$Score.Sut2.4))
+  
+  score
+  
+  performance = data.frame(label,task,score)
+  
+  
+  ggplot(performance, aes(x = label, y = score)) + geom_bar(aes(fill=task), position = "dodge", stat="identity", width = 0.8, col="black") +
+    labs(title = "Accuracy barplot of all subjects", x = "", y = "Score") +
+    theme_bw() + 
+    theme(plot.title = element_text(hjust=0.5)) +
+    labs(fill = "Scores") +
+    scale_y_continuous(breaks = seq(0,30,by=2), limits = c(0,30))
+  
+  
+  outputFile = paste("1.Quality_control/Performance_Data/Accuracy/average_accuracy_plot.png")
+  #...save the output files
+  ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
+  
+  
+  
+  
+}
+
+
 
 
 draw_Biographic_Data_plots(data)
@@ -310,6 +353,8 @@ draw_Trait_Psychometric_Data_plots()
 
 draw_timing_plot(data)
 draw_accuracy_plot()
+
+draw_accuracy_plot_combined()
 
 draw_state_psychometric_data()
 
