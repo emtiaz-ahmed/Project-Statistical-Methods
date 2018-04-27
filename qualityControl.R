@@ -425,6 +425,237 @@ draw_timing_plot_combined <- function(){
   
 }
 
+draw_state_psychometric_data_combined<-function(){
+  totalSubject = list.dirs(path = "Data", full.names = TRUE, recursive = FALSE)
+  #removed specific subjects, because they are not in final file
+  totalSubject = totalSubject[-c(5,6,9,15,18,20)]
+  totalSubject
+  flagg = 1
+  
+  nasa.cutting1.1 = 0
+  nasa.cutting1.2 = 0
+  nasa.cutting1.3 = 0
+  nasa.cutting1.4 = 0
+  nasa.cutting1.5 = 0
+  nasa.cutting1.6 = 0
+  nasa.cutting2.1 = 0
+  nasa.cutting2.2 = 0
+  nasa.cutting2.3 = 0
+  nasa.cutting2.4 = 0
+  nasa.cutting2.5 = 0
+  nasa.cutting2.6 = 0
+  nasa.cutting3.1 = 0
+  nasa.cutting3.2 = 0
+  nasa.cutting3.3 = 0
+  nasa.cutting3.4 = 0
+  nasa.cutting3.5 = 0
+  nasa.cutting3.6 = 0
+  nasa.cutting4.1 = 0
+  nasa.cutting4.2 = 0
+  nasa.cutting4.3 = 0
+  nasa.cutting4.4 = 0
+  nasa.cutting4.5 = 0
+  nasa.cutting4.6 = 0
+  nasa.cutting5.1 = 0
+  nasa.cutting5.2 = 0
+  nasa.cutting5.3 = 0
+  nasa.cutting5.4 = 0
+  nasa.cutting5.5 = 0
+  nasa.cutting5.6 = 0
+  
+  nasa.suturing1.1 = 0
+  nasa.suturing1.2 = 0
+  nasa.suturing1.3 = 0
+  nasa.suturing1.4 = 0
+  nasa.suturing1.5 = 0
+  nasa.suturing1.6 = 0
+  nasa.suturing2.1 = 0
+  nasa.suturing2.2 = 0
+  nasa.suturing2.3 = 0
+  nasa.suturing2.4 = 0
+  nasa.suturing2.5 = 0
+  nasa.suturing2.6 = 0
+  
+  nasa.suturing3.1 = 0
+  nasa.suturing3.2 = 0
+  nasa.suturing3.3 = 0
+  nasa.suturing3.4 = 0
+  nasa.suturing3.5 = 0
+  nasa.suturing3.6 = 0
+  
+  nasa.suturing4.1 = 0
+  nasa.suturing4.2 = 0
+  nasa.suturing4.3 = 0
+  nasa.suturing4.4 = 0
+  nasa.suturing4.5 = 0
+  nasa.suturing4.6 = 0
+  
+  nasa.suturing5.1 = 0
+  nasa.suturing5.2 = 0
+  nasa.suturing5.3 = 0
+  nasa.suturing5.4 = 0
+  nasa.suturing5.5 = 0
+  nasa.suturing5.6 = 0
+  
+  
+  for(j in totalSubject){
+    subject.files <- dir(j, recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
+    subject.file.names <- list.dirs(path = "Data", full.names = FALSE, recursive = FALSE)
+    #removed specific subjects, because they are not in final file
+    subject.file.names = subject.file.names[-c(5,6,9,15,18,20)]
+    subject.file.names
+    #...find number of files
+    total.Nasa.file = length(subject.files)
+    total.Nasa.file
+    
+    # session.name = list.dirs(path = "input/subject21", full.names = FALSE, recursive = FALSE)
+    session.name = list.dirs(path = j, full.names = FALSE, recursive = FALSE)
+    total.session = total.Nasa.file / 2
+    
+    if(total.session < length(session.name)){
+      flagg = flagg + 1
+      next
+    }
+    
+    nasa.label.list = list()
+    for(sname in 1:length(session.name)){
+      
+      nasa.label.list[sname] = list(c(rep(session.name[sname],6)))
+      
+    }
+    
+    
+    subject.nasa = list()
+    
+    for(i in 1:total.Nasa.file){
+      temp1 = read.csv(subject.files[i], header = TRUE)
+      subject.nasa[i] = list(temp1)
+      
+    }
+    subject.nasa
+    subject.nasa.df = as.data.frame(subject.nasa)
+    subject.nasa.df
+   
+    nasa.cutting1.1 = nasa.cutting1.1 + subject.nasa.df$Cutting1[1]
+    nasa.cutting1.2 = nasa.cutting1.2 + subject.nasa.df$Cutting1[2]
+    nasa.cutting1.3 = nasa.cutting1.3 + subject.nasa.df$Cutting1[3]
+    nasa.cutting1.4 = nasa.cutting1.4 + subject.nasa.df$Cutting1[4]
+    nasa.cutting1.5 = nasa.cutting1.5 + subject.nasa.df$Cutting1[5]
+    nasa.cutting1.6 = nasa.cutting1.6 + subject.nasa.df$Cutting1[6]
+    
+    nasa.cutting2.1 = nasa.cutting2.1 + subject.nasa.df$Cutting2[1]
+    nasa.cutting2.2 = nasa.cutting2.2 + subject.nasa.df$Cutting2[2]
+    nasa.cutting2.3 = nasa.cutting2.3 + subject.nasa.df$Cutting2[3]
+    nasa.cutting2.4 = nasa.cutting2.4 + subject.nasa.df$Cutting2[4]
+    nasa.cutting2.5 = nasa.cutting2.5 + subject.nasa.df$Cutting2[5]
+    nasa.cutting2.6 = nasa.cutting2.6 + subject.nasa.df$Cutting2[6]
+    
+    nasa.cutting3.1 = nasa.cutting3.1 + subject.nasa.df$Cutting3[1]
+    nasa.cutting3.2 = nasa.cutting3.2 + subject.nasa.df$Cutting3[2]
+    nasa.cutting3.3 = nasa.cutting3.3 + subject.nasa.df$Cutting3[3]
+    nasa.cutting3.4 = nasa.cutting3.4 + subject.nasa.df$Cutting3[4]
+    nasa.cutting3.5 = nasa.cutting3.5 + subject.nasa.df$Cutting3[5]
+    nasa.cutting3.6 = nasa.cutting3.6 + subject.nasa.df$Cutting3[6]
+    
+    nasa.cutting4.1 = nasa.cutting4.1 + subject.nasa.df$Cutting4[1]
+    nasa.cutting4.2 = nasa.cutting4.2 + subject.nasa.df$Cutting4[2]
+    nasa.cutting4.3 = nasa.cutting4.3 + subject.nasa.df$Cutting4[3]
+    nasa.cutting4.4 = nasa.cutting4.4 + subject.nasa.df$Cutting4[4]
+    nasa.cutting4.5 = nasa.cutting4.5 + subject.nasa.df$Cutting4[5]
+    nasa.cutting4.6 = nasa.cutting4.6 + subject.nasa.df$Cutting4[6]
+    
+    nasa.cutting5.1 = nasa.cutting5.1 + subject.nasa.df$Cutting5[1]
+    nasa.cutting5.2 = nasa.cutting5.2 + subject.nasa.df$Cutting5[2]
+    nasa.cutting5.3 = nasa.cutting5.3 + subject.nasa.df$Cutting5[3]
+    nasa.cutting5.4 = nasa.cutting5.4 + subject.nasa.df$Cutting5[4]
+    nasa.cutting5.5 = nasa.cutting5.5 + subject.nasa.df$Cutting5[5]
+    nasa.cutting5.6 = nasa.cutting5.6 + subject.nasa.df$Cutting5[6]
+    
+    nasa.suturing1.1 = nasa.suturing1.1 + subject.nasa.df$Suturing1[1]
+    nasa.suturing1.2 = nasa.suturing1.2 + subject.nasa.df$Suturing1[2]
+    nasa.suturing1.3 = nasa.suturing1.3 + subject.nasa.df$Suturing1[3]
+    nasa.suturing1.4 = nasa.suturing1.4 + subject.nasa.df$Suturing1[4]
+    nasa.suturing1.5 = nasa.suturing1.5 + subject.nasa.df$Suturing1[5]
+    nasa.suturing1.6 = nasa.suturing1.6 + subject.nasa.df$Suturing1[6]
+    
+    nasa.suturing2.1 = nasa.suturing2.1 + subject.nasa.df$Suturing2[1]
+    nasa.suturing2.2 = nasa.suturing2.2 + subject.nasa.df$Suturing2[2]
+    nasa.suturing2.3 = nasa.suturing2.3 + subject.nasa.df$Suturing2[3]
+    nasa.suturing2.4 = nasa.suturing2.4 + subject.nasa.df$Suturing2[4]
+    nasa.suturing2.5 = nasa.suturing2.5 + subject.nasa.df$Suturing2[5]
+    nasa.suturing2.6 = nasa.suturing2.6 + subject.nasa.df$Suturing2[6]
+    
+    nasa.suturing3.1 = nasa.suturing3.1 + subject.nasa.df$Suturing3[1]
+    nasa.suturing3.2 = nasa.suturing3.2 + subject.nasa.df$Suturing3[2]
+    nasa.suturing3.3 = nasa.suturing3.3 + subject.nasa.df$Suturing3[3]
+    nasa.suturing3.4 = nasa.suturing3.4 + subject.nasa.df$Suturing3[4]
+    nasa.suturing3.5 = nasa.suturing3.5 + subject.nasa.df$Suturing3[5]
+    nasa.suturing3.6 = nasa.suturing3.6 + subject.nasa.df$Suturing3[6]
+    
+    nasa.suturing4.1 = nasa.suturing4.1 + subject.nasa.df$Suturing4[1]
+    nasa.suturing4.2 = nasa.suturing4.2 + subject.nasa.df$Suturing4[2]
+    nasa.suturing4.3 = nasa.suturing4.3 + subject.nasa.df$Suturing4[3]
+    nasa.suturing4.4 = nasa.suturing4.4 + subject.nasa.df$Suturing4[4]
+    nasa.suturing4.5 = nasa.suturing4.5 + subject.nasa.df$Suturing4[5]
+    nasa.suturing4.6 = nasa.suturing4.6 + subject.nasa.df$Suturing4[6]
+    
+    nasa.suturing5.1 = nasa.suturing5.1 + subject.nasa.df$Suturing5[1]
+    nasa.suturing5.2 = nasa.suturing5.2 + subject.nasa.df$Suturing5[2]
+    nasa.suturing5.3 = nasa.suturing5.3 + subject.nasa.df$Suturing5[3]
+    nasa.suturing5.4 = nasa.suturing5.4 + subject.nasa.df$Suturing5[4]
+    nasa.suturing5.5 = nasa.suturing5.5 + subject.nasa.df$Suturing5[5]
+    nasa.suturing5.6 = nasa.suturing5.6 + subject.nasa.df$Suturing5[6]
+    
+    
+    flagg = flagg + 1
+    
+  }
+  
+  nasa.label = c(rep("Session 1",6), rep("Session 2",6), rep("Session 3",6), rep("Session 4",6), rep("Session 5",6))
+  nasa.response = c(rep(c("Mental Demand", "Physical Demand", "Temporal Demand", "Performance", "Effort", "Frustration"),5))
+  nasa.response
+  
+  nasa.cut = c(nasa.cutting1.1/13,nasa.cutting1.2/13, nasa.cutting1.3/13, nasa.cutting1.4/13,nasa.cutting1.5/13,nasa.cutting1.6/13,
+               nasa.cutting2.1/13,nasa.cutting2.2/13, nasa.cutting2.3/13, nasa.cutting2.4/13,nasa.cutting2.5/13,nasa.cutting2.6/13,
+               nasa.cutting3.1/13,nasa.cutting3.2/13, nasa.cutting3.3/13, nasa.cutting3.4/13,nasa.cutting3.5/13,nasa.cutting3.6/13,
+               nasa.cutting4.1/13,nasa.cutting4.2/13, nasa.cutting4.3/13, nasa.cutting4.4/13,nasa.cutting4.5/13,nasa.cutting4.6/13,
+               nasa.cutting5.1/13,nasa.cutting5.2/13, nasa.cutting5.3/13, nasa.cutting5.4/13,nasa.cutting5.5/13,nasa.cutting5.6/13)
+               
+  nasa.sut = c(nasa.suturing1.1/13,nasa.suturing1.2/13,nasa.suturing1.3/13,nasa.suturing1.4/13,nasa.suturing1.5/13,nasa.suturing1.6/13,
+               nasa.suturing2.1/13,nasa.suturing2.2/13,nasa.suturing2.3/13,nasa.suturing2.4/13,nasa.suturing2.5/13,nasa.suturing2.6/13,
+               nasa.suturing3.1/13,nasa.suturing3.2/13,nasa.suturing3.3/13,nasa.suturing3.4/13,nasa.suturing3.5/13,nasa.suturing3.6/13,
+               nasa.suturing4.1/13,nasa.suturing4.2/13,nasa.suturing4.3/13,nasa.suturing4.4/13,nasa.suturing4.5/13,nasa.suturing4.6/13,
+               nasa.suturing5.1/13,nasa.suturing5.2/13,nasa.suturing5.3/13,nasa.suturing5.4/13,nasa.suturing5.5/13,nasa.suturing5.6/13)
+  
+  nasa.data = data.frame(nasa.label, nasa.response, nasa.cut, nasa.sut)
+  nasa.data
+  
+  ggplot(nasa.data, aes(x=nasa.label, y=nasa.cut)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
+    labs(title = "Barplots for all the NASA-TLX subscales of Cutting", x = "", y = "Avg. Score") +
+    theme_bw() +
+    theme(plot.title = element_text(hjust=0.5)) +
+    labs(fill = "Response") +
+    scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
+    scale_fill_manual(values = c("dodgerblue","plum","gold","deeppink1","springgreen","gray33"))
+  
+  outputFile = paste("1.Quality_control/State_Psychometric_Data/Cutting/average_cutting_nasa_plot.png")
+  #...save the output files
+  ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
+  
+  ggplot(nasa.data, aes(x=nasa.label, y=nasa.sut)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
+    labs(title = "Barplots for all the NASA-TLX subscales of Suturing", x = "", y = "Avg. Score") + theme_bw() +
+    theme(plot.title = element_text(hjust=0.5)) +
+    labs(fill = "Response") +
+    scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
+    scale_fill_manual(values = c("dodgerblue","plum","gold","deeppink1","springgreen","gray33"))
+  
+  outputFile = paste("1.Quality_control/State_Psychometric_Data/Suturing/average_suturing_nasa_plot.png")
+  #...save the output files
+  ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
+  
+  
+}
+
 
 
 
@@ -436,6 +667,7 @@ draw_accuracy_plot()
 
 draw_accuracy_plot_combined()
 draw_timing_plot_combined()
+draw_state_psychometric_data_combined()
 
 draw_state_psychometric_data()
 
