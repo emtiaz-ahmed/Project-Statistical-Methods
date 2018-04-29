@@ -7,7 +7,7 @@
 #-------------------------#
 #--------LIBRARIES--------#
 #-------------------------#
-install.packages("here")
+# install.packages("here")
 
 library(dplyr)
 library(here)
@@ -42,9 +42,9 @@ getMean <- function(file_dir, file_name_pattern) {
 
 addRow <- function(df, task_name, mean_val, subj_idx, sess_idx) {
   df <- rbind(df, data.frame(
-                    "Id" = paste0("S", subj_idx, "-S", sess_idx),
-                    "Subject" = paste0("sub", subj_idx),
-                    "Session" = paste0("sess", sess_idx),
+                    "Id" = paste0("S", subj_idx, "-S", sess_idx, "-", substr(task_name, 1, 3)),
+                    "Subject" = paste0("Suject", subj_idx),
+                    "Session" = paste0("Session", sess_idx),
                     "Task" = task_name,
                     "Mean PP" = mean_val,
                     stringsAsFactors = F
@@ -145,8 +145,8 @@ for(subj_idx in 1 : length(subj_list)) {
       # suturing_mean <- getMean(session_path, suturing_file_pattern)
       
       ## APPENDING EACH ROW FOR A SESSION ##
-      hyp_df <- addRow(hyp_df, 'cutting', cutting_mean, subj_id, session_id)
-      hyp_df <- addRow(hyp_df, 'suturing', suturing_mean, subj_id, session_id)
+      hyp_df <- addRow(hyp_df, 'Cutting', cutting_mean, subj_id, session_id)
+      hyp_df <- addRow(hyp_df, 'Suturing', suturing_mean, subj_id, session_id)
       
       rm(cutting_mean, suturing_mean)
     }
