@@ -216,6 +216,7 @@ for(subj_idx in 1 : length(subj_list)) {
       single_plot <- ggplot(current_df) +
         # geom_line(data=getDataFrameExceptNanPerspiration(current_df), aes(Time, Perspiration, colour=label)) +
         geom_line(aes(Time, Perspiration, colour=label)) +
+        theme_bw() +
         xlab(x_lab) +
         ylab(y_lab) +
         xlim(0, x_max_subj) +
@@ -273,6 +274,6 @@ for(subj_idx in 1 : length(subj_list)) {
   grid_plot <- grid.arrange(grid_plot, mylegend, nrow=2,heights=c(20, 1), top=textGrob(grid_plot_title, gp=gpar(fontsize=18, font=1)))
   
   ## SAVING GRID PLOT
-  image_path <- file.path(grid_image_dir, paste(subj_list[subj_idx], ".png", sep=""))
+  image_path <- file.path(grid_image_dir, paste(subj_list[subj_idx], ".pdf", sep=""))
   save_image(image_path, grid_plot)
 }
