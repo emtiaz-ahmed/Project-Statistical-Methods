@@ -61,8 +61,9 @@ draw_Trait_Psychometric_Data_plots<-function(){
     theme(plot.title = element_text(hjust=0.5))
   
   outputFile = paste("1.Quality_control/Trait_Psychometric_data/",".png")
-  ggsave(file="1.Quality_control/Trait_Psychometric_data/Tai_score_histogram.png", dpi = 600, width = 10, height = 8, units = "in")
-
+  # ggsave(file="1.Quality_control/Trait_Psychometric_data/Tai_score_histogram.png", dpi = 600, width = 10, height = 8, units = "in")
+  ggsave(file="1.Quality_control/Trait_Psychometric_data/Tai_score_histogram.pdf")
+  
 }
 
 
