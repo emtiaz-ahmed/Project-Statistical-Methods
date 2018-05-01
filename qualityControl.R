@@ -5,6 +5,7 @@ library(lubridate)
 library(gridExtra)
 library(grid)
 library(ggpubr)
+library(cowplot)
 
 #...read input file
 data = read.csv("Data/MicrosurgeryPerformance.csv", header = TRUE, sep=",")
@@ -200,79 +201,6 @@ draw_accuracy_plot <- function(){
     
   }
 
-  
-  
-}
-
-#...draw the accuracy plot grid 
-draw_accuracy_plot_grid <- function(){
-  data = read.csv("Data/MicrosurgeryPerformance.csv")
-  data
-  acc.plots = list()
-  # #...create dataframe using subject name and all scores
-  score = data.frame(data$ID, data$Score.Cut1, data$Score.Cut2 , data$Score.Cut1.1, data$Score.Cut2.1,
-                     data$Score.Cut1.2, data$Score.Cut2.2, data$Score.Cut1.3, data$Score.Cut2.3, 
-                     data$Score.Cut1.4, data$Score.Cut2.4, data$Score.Sut1, data$Score.Sut2, 
-                     data$Score.Sut1.1, data$Score.Sut2.1, data$Score.Sut1.2, data$Score.Sut2.2,
-                     data$Score.Sut1.3, data$Score.Sut2.3, data$Score.Sut1.4, data$Score.Sut2.4)
-  # score = data.frame(data$UH,data$Score.1, data$Score.2, data$Score.3, data$Score.4, data$Score.5,
-  #                    data$Sutures.1, data$Sutures.2, data$Sutures.3, data$Sutures.4, data$Sutures.5)
-  score
-  # names(score)
-  #...find the number of rows
-  number.of.row = nrow(score)
-  
-  
-  for(i in 1:number.of.row){
-    #...select specific row from the dataframe
-    sub.score = score[i,]
-    sub.score
-    #...find the subject number
-    subject.name = paste("Subject",sub.score$data.ID,sep=" ")
-    
-    #...create x axis ticks
-    label = c(rep("Session 1",4), rep("Session 2",4), rep("Session 3",4), rep("Session 4",4),
-              rep("Session 5",4))
-    #... task label
-    task = c(rep(c("Cutting 1", "Cutting 2", "Suturing 1", "Suturing 2" ),5))
-    
-    
-    performance = c(sub.score$data.Score.Cut1 , sub.score$data.Score.Cut2, sub.score$data.Score.Sut1 ,
-                    sub.score$data.Score.Sut2, sub.score$data.Score.Cut1.1 , sub.score$data.Score.Cut2.1,
-                    sub.score$data.Score.Sut1.1 , sub.score$data.Score.Sut2.1, sub.score$data.Score.Cut1.2 ,
-                    sub.score$data.Score.Cut2.2, sub.score$data.Score.Sut1.2 , sub.score$data.Score.Sut2.2,
-                    sub.score$data.Score.Cut1.3 , sub.score$data.Score.Cut2.3, sub.score$data.Score.Sut1.3 ,
-                    sub.score$data.Score.Sut2.3, sub.score$data.Score.Cut1.4 , sub.score$data.Score.Cut2.4,
-                    sub.score$data.Score.Sut1.4 , sub.score$data.Score.Sut2.4)
-    
-    performance
-    
-    #...create dataframe using label, task and performance
-    subject.performance = data.frame(label, task, performance)
-    subject.performance
-    
-    #...concate string to create title
-    barTitle = subject.name
-    xLabel = paste("Subject", subject.name)
-    
-    
-    p = ggplot(subject.performance, aes(x = label, y = performance)) + geom_bar(aes(fill=task), position = "dodge", stat="identity", width = 0.8, col="black") +
-      labs(title = barTitle, x = "", y = "Score") +
-      theme_bw() + 
-      labs(fill = "Tasks") +
-      guides(fill=FALSE)+
-      scale_y_continuous(breaks = seq(0,30,by=2), limits = c(0,30))
-    
-    
-    # outputFile = paste("1.Quality_control/Performance_Data/Accuracy/accuracy_plot_of_",subject.name,".png")
-    #...save the output files
-    # ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
-    acc.plots[[i]] <- p
-    
-  }
-  
-  m1 = marrangeGrob(acc.plots,nrow=3,ncol = 3)
-  ggsave("m.pdf", m1, width = 15, height = 10, units = "in")
   
   
 }
@@ -738,6 +666,106 @@ draw_state_psychometric_data_combined<-function(){
 }
 
 
+#...draw the accuracy plot grid 
+draw_accuracy_plot_grid <- function(){
+  data = read.csv("Data/MicrosurgeryPerformance.csv")
+  data
+  acc.plots1 = list()
+  acc.plots2 = list()
+  # #...create dataframe using subject name and all scores
+  score = data.frame(data$ID, data$Score.Cut1, data$Score.Cut2 , data$Score.Cut1.1, data$Score.Cut2.1,
+                     data$Score.Cut1.2, data$Score.Cut2.2, data$Score.Cut1.3, data$Score.Cut2.3, 
+                     data$Score.Cut1.4, data$Score.Cut2.4, data$Score.Sut1, data$Score.Sut2, 
+                     data$Score.Sut1.1, data$Score.Sut2.1, data$Score.Sut1.2, data$Score.Sut2.2,
+                     data$Score.Sut1.3, data$Score.Sut2.3, data$Score.Sut1.4, data$Score.Sut2.4)
+  # score = data.frame(data$UH,data$Score.1, data$Score.2, data$Score.3, data$Score.4, data$Score.5,
+  #                    data$Sutures.1, data$Sutures.2, data$Sutures.3, data$Sutures.4, data$Sutures.5)
+  score
+  # names(score)
+  #...find the number of rows
+  number.of.row = nrow(score)
+  flag = 1
+  
+  for(i in 1:number.of.row){
+    #...select specific row from the dataframe
+    sub.score = score[i,]
+    sub.score
+    #...find the subject number
+    subject.name = paste("Subject",sub.score$data.ID,sep=" ")
+    
+    #...create x axis ticks
+    label = c(rep("Session 1",4), rep("Session 2",4), rep("Session 3",4), rep("Session 4",4),
+              rep("Session 5",4))
+    #... task label
+    task = c(rep(c("Cutting 1", "Cutting 2", "Suturing 1", "Suturing 2" ),5))
+    
+    
+    performance = c(sub.score$data.Score.Cut1 , sub.score$data.Score.Cut2, sub.score$data.Score.Sut1 ,
+                    sub.score$data.Score.Sut2, sub.score$data.Score.Cut1.1 , sub.score$data.Score.Cut2.1,
+                    sub.score$data.Score.Sut1.1 , sub.score$data.Score.Sut2.1, sub.score$data.Score.Cut1.2 ,
+                    sub.score$data.Score.Cut2.2, sub.score$data.Score.Sut1.2 , sub.score$data.Score.Sut2.2,
+                    sub.score$data.Score.Cut1.3 , sub.score$data.Score.Cut2.3, sub.score$data.Score.Sut1.3 ,
+                    sub.score$data.Score.Sut2.3, sub.score$data.Score.Cut1.4 , sub.score$data.Score.Cut2.4,
+                    sub.score$data.Score.Sut1.4 , sub.score$data.Score.Sut2.4)
+    
+    performance
+    
+    #...create dataframe using label, task and performance
+    subject.performance = data.frame(label, task, performance)
+    subject.performance
+    
+    #...concate string to create title
+    barTitle = subject.name
+    xLabel = paste("Subject", subject.name)
+    
+    if(i < 9){
+      # used p for collect the legend
+      p = ggplot(subject.performance, aes(x = label, y = performance)) + geom_bar(aes(fill=task), position = "dodge", stat="identity", width = 0.8, col="black") +
+        labs(title = barTitle, x = "", y = "Score") +
+        theme_bw() + 
+        theme(plot.title = element_text(hjust=0.5)) +
+        labs(fill = "Tasks") +
+        scale_y_continuous(breaks = seq(0,30,by=2), limits = c(0,30))
+      
+      acc.plots1[[i]] = ggplot(subject.performance, aes(x = label, y = performance)) + geom_bar(aes(fill=task), position = "dodge", stat="identity", width = 0.8, col="black") +
+        labs(title = barTitle, x = "", y = "Score") +
+        theme_bw() + 
+        theme(plot.title = element_text(hjust=0.5), legend.position = "none") +
+        labs(fill = "Tasks") +
+        scale_y_continuous(breaks = seq(0,30,by=2), limits = c(0,30))
+    }else{
+      acc.plots2[[i-8]] = ggplot(subject.performance, aes(x = label, y = performance)) + geom_bar(aes(fill=task), position = "dodge", stat="identity", width = 0.8, col="black") +
+        labs(title = barTitle, x = "", y = "Score") +
+        theme_bw() + 
+        theme(plot.title = element_text(hjust=0.5), legend.position = "none") +
+        labs(fill = "Tasks") +
+        scale_y_continuous(breaks = seq(0,30,by=2), limits = c(0,30))
+    }
+    
+    
+    
+    
+    
+  }
+  #add the legend as a new plot, and get_legend() from cowplot
+  acc.plots1[[9]] <- get_legend(p + theme(legend.position="right"))
+  acc.plots2[[number.of.row-7]] <- get_legend(p + theme(legend.position="right"))
+ 
+  
+  m1 = marrangeGrob(acc.plots1, nrow=3,ncol = 3, top = "")
+  m2 = marrangeGrob(acc.plots2, nrow=3,ncol = 3, top = "")
+  # m1 = marrangeGrob(acc.plots1, nrow=3, ncol=3, list(top=NULL) )
+  # m1 = grid.arrange(acc.plots1, nrow=3, ncol=3)
+  # m1 = plot_grid(acc.plots1, nrow = 3, ncol = 3)
+  ggsave("1.Quality_control/Performance_Data/Accuracy/grid_accuracy_plot_1.pdf", m1,width = 15, height = 10, units = "in")
+  ggsave("1.Quality_control/Performance_Data/Accuracy/grid_accuracy_plot_2.pdf", m2,width = 15, height = 10, units = "in")
+  
+  # ggsave("m.pdf", m1, width = 15, height = 10, units = "in")
+  
+  
+}
+
+
 
 
 draw_Biographic_Data_plots(data)
@@ -751,6 +779,8 @@ draw_timing_plot_combined()
 draw_state_psychometric_data_combined()
 
 draw_state_psychometric_data()
+
+draw_accuracy_plot_grid()
 
 
 
