@@ -853,6 +853,153 @@ draw_timing_plot_grid <- function(data){
 }
 
 
+draw_state_psychometric_data_grid<-function(){
+  totalSubject = list.dirs(path = "Data", full.names = TRUE, recursive = FALSE)
+  #removed specific subjects, because they are not in final file
+  totalSubject = totalSubject[-c(5,6,9,15,18,20)]
+  totalSubject
+  flagg = 1
+  subject.flag = 1
+  
+  acc.plots.c1 = list()
+  acc.plots.c2 = list()
+  acc.plots.s1 = list()
+  acc.plots.s2 = list()
+  
+  
+  
+  for(j in totalSubject){
+    # dir.name = paste("input/", "subject26" )
+    # dir.name
+    #...read all tai.csv files from all folders
+    # subject.files <- dir("input/subject26", recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
+    subject.files <- dir(j, recursive=TRUE, full.names=TRUE, pattern="*_NASA.csv$")
+    subject.file.names <- list.dirs(path = "Data", full.names = FALSE, recursive = FALSE)
+    #removed specific subjects, because they are not in final file
+    subject.file.names = subject.file.names[-c(5,6,9,15,18,20)]
+    subject.file.names
+    #...find number of files
+    total.Nasa.file = length(subject.files)
+    total.Nasa.file
+    
+    # session.name = list.dirs(path = "input/subject21", full.names = FALSE, recursive = FALSE)
+    session.name = list.dirs(path = j, full.names = FALSE, recursive = FALSE)
+    total.session = total.Nasa.file / 2
+    
+    if(total.session < length(session.name)){
+      flagg = flagg + 1
+      next
+    }
+    
+    nasa.label.list = list()
+    for(sname in 1:length(session.name)){
+      
+      nasa.label.list[sname] = list(c(rep(session.name[sname],6)))
+      
+    }
+    nasa.label = unlist(nasa.label.list)
+    nasa.label
+    
+    
+    subject.nasa = list()
+    
+    for(i in 1:total.Nasa.file){
+      temp1 = read.csv(subject.files[i], header = TRUE)
+      subject.nasa[i] = list(temp1)
+      
+    }
+    subject.nasa
+    subject.nasa.df = as.data.frame(subject.nasa)
+    subject.nasa.df
+    
+    
+    
+    nasa.response = c(rep(c("Mental Demand", "Physical Demand", "Temporal Demand", "Performance", "Effort", "Frustration"),length(session.name)))
+    nasa.response
+    nasa.cutting = c(subject.nasa.df$Cutting1, subject.nasa.df$Cutting2, 
+                     subject.nasa.df$Cutting3, subject.nasa.df$Cutting4, subject.nasa.df$Cutting5)
+    nasa.cutting
+    nasa.suturing = c(subject.nasa.df$Suturing1, subject.nasa.df$Suturing2, subject.nasa.df$Suturing3,
+                      subject.nasa.df$Suturing4, subject.nasa.df$Suturing5)
+    nasa.suturing
+    
+    nasa.data = data.frame(nasa.label, nasa.response, nasa.cutting, nasa.suturing)
+    nasa.data
+    
+    subject.name = paste(" ", subject.file.names[flagg])
+    subject.name
+    # #...concate string to create title
+    barTitle = paste(subject.name)
+    xLabel = subject.name
+    
+    if(subject.flag < 9){
+      p = ggplot(nasa.data, aes(x=nasa.label, y=nasa.cutting)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
+        labs(title = barTitle, x = "", y = "Score") +
+        theme_bw() +
+        theme(plot.title = element_text(hjust=0.5)) +
+        labs(fill = "Response") +
+        scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
+        scale_fill_manual(values = c("dodgerblue","plum","gold","deeppink1","springgreen","gray33"))
+      
+      acc.plots.c1[[subject.flag]] = ggplot(nasa.data, aes(x=nasa.label, y=nasa.cutting)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
+        labs(title = barTitle, x = "", y = "Score") +
+        theme_bw() +
+        theme(plot.title = element_text(hjust=0.5), legend.position = "none") +
+        labs(fill = "Response") +
+        scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
+        scale_fill_manual(values = c("dodgerblue","plum","gold","deeppink1","springgreen","gray33"))
+      
+      acc.plots.s1[[subject.flag]] = ggplot(nasa.data, aes(x=nasa.label, y=nasa.suturing)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
+        labs(title = barTitle, x = "", y = "Score") + theme_bw() +
+        theme(plot.title = element_text(hjust=0.5), legend.position = "none") +
+        labs(fill = "Response") +
+        scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
+        scale_fill_manual(values = c("dodgerblue","plum","gold","deeppink1","springgreen","gray33"))
+      
+    }else{
+      acc.plots.c2[[subject.flag-8]] = ggplot(nasa.data, aes(x=nasa.label, y=nasa.cutting)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
+        labs(title = barTitle, x = "", y = "Score") +
+        theme_bw() +
+        theme(plot.title = element_text(hjust=0.5), legend.position = "none") +
+        labs(fill = "Response") +
+        scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
+        scale_fill_manual(values = c("dodgerblue","plum","gold","deeppink1","springgreen","gray33"))
+      
+      acc.plots.s2[[subject.flag-8]] = ggplot(nasa.data, aes(x=nasa.label, y=nasa.suturing)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
+        labs(title = barTitle, x = "", y = "Score") + theme_bw() +
+        theme(plot.title = element_text(hjust=0.5), legend.position = "none") +
+        labs(fill = "Response") +
+        scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20)) +
+        scale_fill_manual(values = c("dodgerblue","plum","gold","deeppink1","springgreen","gray33"))
+    }
+   
+    flagg = flagg + 1
+    subject.flag = subject.flag + 1
+  }
+  
+  #add the legend as a new plot, and get_legend() from cowplot
+  acc.plots.c1[[9]] <- get_legend(p + theme(legend.position="right"))
+  acc.plots.c2[[subject.flag-8]] <- get_legend(p + theme(legend.position="right"))
+  
+  acc.plots.s1[[9]] <- get_legend(p + theme(legend.position="right"))
+  acc.plots.s2[[subject.flag-8]] <- get_legend(p + theme(legend.position="right"))
+
+  
+  m1 = marrangeGrob(acc.plots.c1, nrow=3,ncol = 3, top = "")
+  m2 = marrangeGrob(acc.plots.c2, nrow=3,ncol = 3, top = "")
+  m3 = marrangeGrob(acc.plots.s1, nrow=3,ncol = 3, top = "")
+  m4 = marrangeGrob(acc.plots.s2, nrow=3,ncol = 3, top = "")
+  ggsave("1.Quality_control/State_Psychometric_Data/Cutting/grid_nasa_cutting_plot_1.pdf", m1,width = 15, height = 10, units = "in")
+  ggsave("1.Quality_control/State_Psychometric_Data/Cutting/grid_nasa_cutting_plot_2.pdf", m2,width = 15, height = 10, units = "in")
+  ggsave("1.Quality_control/State_Psychometric_Data/Suturing/grid_nasa_suturing_plot_1.pdf", m1,width = 15, height = 10, units = "in")
+  ggsave("1.Quality_control/State_Psychometric_Data/Suturing/grid_nasa_suturing_plot_2.pdf", m2,width = 15, height = 10, units = "in")
+
+  
+  
+  
+}
+
+
 
 draw_Biographic_Data_plots(data)
 draw_Trait_Psychometric_Data_plots()
@@ -868,7 +1015,7 @@ draw_state_psychometric_data()
 
 draw_accuracy_plot_grid()
 draw_timing_plot_grid(data)
-
+draw_state_psychometric_data_grid()
 
 
 
