@@ -720,8 +720,8 @@ draw_state_psychometric_data_combined<-function(){
   
   outputFile = paste("1.Quality_control/State_Psychometric_Data/Cutting/average_cutting_nasa_plot.png")
   #...save the output files
-  ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
-  
+  # ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
+  ggsave(file = "1.Quality_control/State_Psychometric_Data/Cutting/average_cutting_nasa_plot.pdf",width = 10, height = 8, units = "in")
   ggplot(nasa.data, aes(x=nasa.label, y=nasa.sut)) + geom_bar(aes(fill=nasa.response), position = "dodge", stat="identity", width = 0.8, col="black") +
     labs(title = "Barplots for all the NASA-TLX subscales of Suturing", x = "", y = "Avg. Score") + theme_bw() +
     theme(plot.title = element_text(hjust=0.5)) +
@@ -731,7 +731,8 @@ draw_state_psychometric_data_combined<-function(){
   
   outputFile = paste("1.Quality_control/State_Psychometric_Data/Suturing/average_suturing_nasa_plot.png")
   #...save the output files
-  ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
+  # ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
+  ggsave(file = "1.Quality_control/State_Psychometric_Data/Suturing/average_suturing_nasa_plot.pdf",width = 10, height = 8, units = "in")
   
   
 }
