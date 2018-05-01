@@ -417,8 +417,9 @@ draw_accuracy_plot_combined <- function(){
   
   outputFile = paste("1.Quality_control/Performance_Data/Accuracy/average_accuracy_plot.png")
   #...save the output files
-  ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
+  # ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
   
+  ggsave(file = "1.Quality_control/Performance_Data/Accuracy/average_accuracy_plot.pdf")
   
   
   
@@ -498,8 +499,8 @@ draw_timing_plot_combined <- function(){
   
   outputFile = paste("1.Quality_control/Performance_Data/Timing/average_timing_plot.png")
   #...save the output files
-  ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
-  
+  # ggsave(file = outputFile, dpi = 600, width = 10, height = 8, units = "in")
+  ggsave(file = "1.Quality_control/Performance_Data/Timing/average_timing_plot.pdf")
   
   
 }
