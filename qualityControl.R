@@ -754,17 +754,103 @@ draw_accuracy_plot_grid <- function(){
   
   m1 = marrangeGrob(acc.plots1, nrow=3,ncol = 3, top = "")
   m2 = marrangeGrob(acc.plots2, nrow=3,ncol = 3, top = "")
-  # m1 = marrangeGrob(acc.plots1, nrow=3, ncol=3, list(top=NULL) )
-  # m1 = grid.arrange(acc.plots1, nrow=3, ncol=3)
-  # m1 = plot_grid(acc.plots1, nrow = 3, ncol = 3)
   ggsave("1.Quality_control/Performance_Data/Accuracy/grid_accuracy_plot_1.pdf", m1,width = 15, height = 10, units = "in")
   ggsave("1.Quality_control/Performance_Data/Accuracy/grid_accuracy_plot_2.pdf", m2,width = 15, height = 10, units = "in")
-  
-  # ggsave("m.pdf", m1, width = 15, height = 10, units = "in")
   
   
 }
 
+
+draw_timing_plot_grid <- function(data){
+  #...create dataframe using subject name and all cutting time
+  cut.timing = data.frame(data$ID, data$Cutting.Time.1, data$Cutting.Time.2, data$Cutting.Time.3, data$Cutting.Time.4, data$Cutting.Time.5)
+  #...create dataframe using subject name and all suturing time
+  sut.timing = data.frame(data$ID, data$Suturing.Time.1 , data$Suturing.Time.2, data$Suturing.Time.3,
+                          data$Suturing.Time.4, data$Suturing.Time.5)
+  #...find the number of rows
+  number.of.row = nrow(cut.timing)
+  acc.plots1 = list()
+  acc.plots2 = list()
+  
+  
+  
+  for(i in 1:number.of.row){
+    #...select specific row from the dataframe
+    sub.timing.cut = cut.timing[i,]
+    sub.timing.sut = sut.timing[i,] 
+    #...find the subject number
+    subject.name = paste("Subject",sub.timing.cut$data.ID,sep=" ")
+    
+    #...create x axis ticks
+    label = c(rep("Session 1",2), rep("Session 2",2), rep("Session 3",2), rep("Session 4",2), rep("Session 5",2))
+    task.type = c("Cutting", "Suturing")
+    tasks = rep(task.type, 5)
+    
+    #...convert timing into time using ms()[member of lubridate library] and then convert into numeric value
+    cut.session1 = as.numeric(ms(sub.timing.cut$data.Cutting.Time.1)) / 60
+    cut.session2 = as.numeric(ms(sub.timing.cut$data.Cutting.Time.2)) / 60
+    cut.session3 = as.numeric(ms(sub.timing.cut$data.Cutting.Time.3)) / 60
+    cut.session4 = as.numeric(ms(sub.timing.cut$data.Cutting.Time.4)) / 60
+    cut.session5 = as.numeric(ms(sub.timing.cut$data.Cutting.Time.5)) / 60
+    
+    #...convert timing into time using ms()[member of lubridate library] and then convert into numeric value
+    sut.session1 = as.numeric(ms(sub.timing.sut$data.Suturing.Time.1)) / 60
+    sut.session2 = as.numeric(ms(sub.timing.sut$data.Suturing.Time.2)) / 60
+    sut.session3 = as.numeric(ms(sub.timing.sut$data.Suturing.Time.3)) / 60
+    sut.session4 = as.numeric(ms(sub.timing.sut$data.Suturing.Time.4)) / 60
+    sut.session5 = as.numeric(ms(sub.timing.sut$data.Suturing.Time.5)) / 60
+    
+    #...copy the timing's
+    timing = c(cut.session1,sut.session1, cut.session2, sut.session2, cut.session3, sut.session3
+               , cut.session4, sut.session4, cut.session5, sut.session5)
+    
+    
+    #...create dataframe using label and cutting timing
+    subject.timing = data.frame(label, tasks, timing)
+    
+    #...concate string to create title
+    barTitle = paste(subject.name)
+    xLabel = paste("Subject", subject.name)
+    
+    if(i<9){
+      p = ggplot(subject.timing, aes(x=label, y=timing)) + geom_bar(aes(fill=tasks), position = "dodge", stat="identity") +
+        labs(title = barTitle, x = "", y = "Time") +
+        labs(fill = "Tasks") +
+        theme_bw() +
+        theme(plot.title = element_text(hjust=0.5), legend.position = "none") +
+        scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20))
+      
+      acc.plots1[[i]] =  ggplot(subject.timing, aes(x=label, y=timing)) + geom_bar(aes(fill=tasks), position = "dodge", stat="identity") +
+        labs(title = barTitle, x = "", y = "Time [m]") +
+        labs(fill = "Tasks") +
+        theme_bw() +
+        theme(plot.title = element_text(hjust=0.5), legend.position = "none") +
+        scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20))
+    }else{
+      acc.plots2[[i-8]] = ggplot(subject.timing, aes(x=label, y=timing)) + geom_bar(aes(fill=tasks), position = "dodge", stat="identity") +
+        labs(title = barTitle, x = "", y = "Time [m]") +
+        labs(fill = "Tasks") +
+        theme_bw() +
+        theme(plot.title = element_text(hjust=0.5), legend.position = "none") +
+        scale_y_continuous(breaks = seq(0,20,by=4), limits = c(0,20))
+    }
+    
+    
+    
+  }
+  
+  #add the legend as a new plot, and get_legend() from cowplot
+  acc.plots1[[9]] <- get_legend(p + theme(legend.position="right"))
+  acc.plots2[[number.of.row-7]] <- get_legend(p + theme(legend.position="right"))
+  
+  m1 = marrangeGrob(acc.plots1, nrow=3,ncol = 3, top = "")
+  m2 = marrangeGrob(acc.plots2, nrow=3,ncol = 3, top = "")
+  ggsave("1.Quality_control/Performance_Data/Timing/grid_timing_plot_1.pdf", m1,width = 15, height = 10, units = "in")
+  ggsave("1.Quality_control/Performance_Data/Timing/grid_timing_plot_2.pdf", m2,width = 15, height = 10, units = "in")
+  
+  
+  
+}
 
 
 
@@ -781,6 +867,7 @@ draw_state_psychometric_data_combined()
 draw_state_psychometric_data()
 
 draw_accuracy_plot_grid()
+draw_timing_plot_grid(data)
 
 
 
