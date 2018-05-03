@@ -77,8 +77,11 @@ shapiro.test(required.df$meanPP)
 # data:  required.df$meanPP
 # W = 0.71883, p-value < 2.2e-16
 
+pdf("hypothesis_plots/model_plot/pp_normality.pdf")
 qqnorm(required.df$meanPP, pch = 1, frame = FALSE)
 qqline(required.df$meanPP, col = "steelblue", lwd = 2)
+dev.off()
+
 
 ########################## not normal based on p value and Q-Q plot
 
@@ -91,8 +94,10 @@ shapiro.test(log(required.df$meanPP))
 # data:  log(required.df$meanPP)
 # W = 0.15846, p-value < 2.2e-16
 
+pdf("hypothesis_plots/model_plot/log_pp__normality.pdf")
 qqnorm(log(required.df$meanPP), pch = 1, frame = FALSE)
 qqline(log(required.df$meanPP), col = "steelblue", lwd = 2)
+dev.off()
 
 ########################## log of meanPP is also not normal based on p value and Q-Q plot
 
@@ -292,11 +297,11 @@ model.i1 = lme(score ~ session + task + session*task,  data=required.df,
 summary(model.i1) 
 
 
-model.i2 = lme(score ~ session + task + session*meanPP,  data=required.df,
+model.i2 = lme(score ~ session + meanPP + session*meanPP,  data=required.df,
                random=~1|subject, na.action = na.omit)
 summary(model.i2) 
 
-model.i3 = lme(score ~ session + task + task*meanPP,  data=required.df,
+model.i3 = lme(score ~ meanPP + task + task*meanPP,  data=required.df,
                random=~1|subject, na.action = na.omit)
 summary(model.i3) 
 
